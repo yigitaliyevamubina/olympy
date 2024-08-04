@@ -46,34 +46,3 @@ func (s *StreamHandlers) SendEvent(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, resp)
 }
-
-// StreamEvents godoc
-// @Summary Stream events in real-time
-// @Description This endpoint streams events in real-time to registered users.
-// @Accept json
-// @Produce json
-// @Param event_id path string true "Event ID"
-// @Success 200 {object} streamingservice.StreamEventResponse
-// @Failure 400 {object} streamingservice.Message
-// @Failure 500 {object} streamingservice.Message
-// @Router /stream/stream/{event_id} [get]
-func (s *StreamHandlers) StreamEvents(ctx *gin.Context) {
-	eventID := ctx.Param("event_id")
-
-	req := &streamingservice.StreamEventRequest{EventId: eventID}
-
-	stream, err := s.client.StreamEvent(ctx, req)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	for {
-		event, err := stream.Recv()
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		ctx.SSEvent("event", event)
-	}
-}
