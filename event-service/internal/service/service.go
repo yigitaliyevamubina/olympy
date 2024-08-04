@@ -1,10 +1,10 @@
 package service
 
 import (
-	genprotos "olympy/event-service/genproto/event_service"
-	"olympy/event-service/internal/storage"
 	"context"
 	"log"
+	genprotos "olympy/event-service/genproto/event_service"
+	"olympy/event-service/internal/storage"
 	"os"
 )
 

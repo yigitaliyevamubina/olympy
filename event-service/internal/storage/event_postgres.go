@@ -218,3 +218,69 @@ func (e *Event) GetAllEvents(ctx context.Context, req *genprotos.GetAllEventsReq
 
 	return eventsResponse, nil
 }
+
+func (e *Event) SearchEvents(ctx context.Context, req *genprotos.SearchEventsRequest) (*genprotos.GetAllEventsResponse, error) {
+	// Determine pagination offsets
+	page := req.Page
+	pageSize := req.PageSize
+	offset := (page - 1) * pageSize
+
+	// Check cache first
+	cacheKey := fmt.Sprintf("events_search_%s_page_%d_size_%d", req.Query, page, pageSize)
+	cachedEvents, err := e.redisClient.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var eventsResponse genprotos.GetAllEventsResponse
+		if err := json.Unmarshal([]byte(cachedEvents), &eventsResponse); err == nil {
+			return &eventsResponse, nil
+		}
+	}
+
+	// Get events with search query and pagination
+	query := `SELECT id, name, sport_type, start_time, end_time 
+			  FROM events 
+			  WHERE name ILIKE '%' || $1 || '%' 
+			  OR sport_type ILIKE '%' || $1 || '%' 
+			  LIMIT $2 OFFSET $3`
+	rows, err := e.db.QueryContext(ctx, query, req.Query, pageSize, offset)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch events: %v", err)
+	}
+	defer rows.Close()
+
+	var events []*genprotos.Event
+	for rows.Next() {
+		var event genprotos.Event
+		if err := rows.Scan(&event.Id, &event.Name, &event.SportType, &event.StartTime, &event.EndTime); err != nil {
+			return nil, fmt.Errorf("failed to scan row: %v", err)
+		}
+		events = append(events, &event)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during rows iteration: %v", err)
+	}
+
+	countQuery := `SELECT COUNT(*) 
+				   FROM events 
+				   WHERE name ILIKE '%' || $1 || '%' 
+				   OR sport_type ILIKE '%' || $1 || '%'`
+	var totalCount int32
+	err = e.db.QueryRowContext(ctx, countQuery, req.Query).Scan(&totalCount)
+	if err != nil {
+		return nil, fmt.Errorf("failed to count events: %v", err)
+	}
+
+	eventsResponse := &genprotos.GetAllEventsResponse{
+		Events:     events,
+		TotalCount: totalCount,
+	}
+
+	// Cache the result
+	eventsJSON, err := json.Marshal(eventsResponse)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal events response: %v", err)
+	}
+	e.redisClient.Set(ctx, cacheKey, eventsJSON, 10*time.Minute)
+
+	return eventsResponse, nil
+}
