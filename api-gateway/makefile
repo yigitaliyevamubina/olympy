@@ -2,4 +2,4 @@ proto:
 	./scripts/gen-proto.sh
 
 swag:
-	swag init -g api/api.go 
+	swag init --dir cmd
