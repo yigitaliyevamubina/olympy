@@ -19,7 +19,7 @@ type Medal struct {
 	queryBuilder squirrel.StatementBuilderType
 }
 
-func New(config *config.Config) (*Medal, error) {
+func NewMedalService(config *config.Config) (*Medal, error) {
 	db, err := ConnectDB(*config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to DB: %v", err)
@@ -131,7 +131,7 @@ func (m *Medal) GetMedal(ctx context.Context, req *medalproto.GetSingleRequest) 
 	return &medal, nil
 }
 
-func (m *Medal) GetAllMedals(ctx context.Context, req *medalproto.ListRequest) (*medalproto.ListResponse, error) {
+func (m *Medal) ListMedals(ctx context.Context, req *medalproto.ListRequest) (*medalproto.ListResponse, error) {
 	var medals []*medalproto.Medal
 	var total int64
 

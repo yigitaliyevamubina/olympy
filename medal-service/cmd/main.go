@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
 	"olympy/medal-service/api"
 	"olympy/medal-service/internal/config"
 	"olympy/medal-service/internal/service"
 	"olympy/medal-service/internal/storage"
-	"log"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -22,12 +22,17 @@ func main() {
 
 	migrateDB()
 
-	storage, err := storage.New(configs)
+	medalstorage, err := storage.NewMedalService(configs)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	api := api.New(service.New(*storage))
+	countrystorage, err := storage.NewCountryService(configs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	api := api.New(service.New(*medalstorage, *countrystorage))
 
 	log.Fatal(api.RUN(configs))
 }
