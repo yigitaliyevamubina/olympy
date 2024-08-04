@@ -1,6 +1,6 @@
-module armiya/equipment-service
+module olympy/medal-service
 
-go 1.22
+go 1.22.5
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
@@ -24,6 +24,6 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240701130421-f6361c86f094 // indirect
+	golang.org/x/text v0.15.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240528184218-531527333157 // indirect
 )

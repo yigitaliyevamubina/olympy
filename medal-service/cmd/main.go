@@ -1,10 +1,10 @@
 package main
 
 import (
-	"armiya/equipment-service/api"
-	"armiya/equipment-service/internal/config"
-	"armiya/equipment-service/internal/service"
-	"armiya/equipment-service/internal/storage"
+	"olympy/medal-service/api"
+	"olympy/medal-service/internal/config"
+	"olympy/medal-service/internal/service"
+	"olympy/medal-service/internal/storage"
 	"log"
 	"os"
 

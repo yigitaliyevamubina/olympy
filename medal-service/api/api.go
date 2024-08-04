@@ -4,8 +4,8 @@ import (
 	"log"
 	"net"
 
-	"armiya/equipment-service/genprotos"
-	"armiya/equipment-service/internal/config"
+	"olympy/medal-service/genprotos"
+	"olympy/medal-service/internal/config"
 
 	"google.golang.org/grpc"
 )
