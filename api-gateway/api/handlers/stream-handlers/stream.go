@@ -3,8 +3,7 @@ package streamhandlers
 import (
 	"log"
 	"net/http"
-
-	streamingservice "olympy/api-gateway/genproto/streaming_service"
+	streamingservice "olympy/api-gateway/genproto/stream_service"
 
 	"github.com/gin-gonic/gin"
 )
