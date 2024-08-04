@@ -1,6 +1,14 @@
 syntax = "proto3";
 
-package medal6_service;;
+package medal6_service;
+
+service MedalService {
+    rpc AddMedal(Medal) returns (Medal);
+    rpc EditMedal(Medal) returns (Medal);
+    rpc DeleteMedal(GetSingleRequest) returns (Message);
+    rpc ListMedals(ListRequest) returns (ListResponse);
+    rpc GetMedal(GetSingleRequest) returns (Medal);
+}
 
 message Medal {
     int64 id = 1;

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"olympy/medal-service/internal/config"
 
 	_ "github.com/lib/pq"
 )

@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	"olympy/medal-service/genprotos"
+	modelservice "olympy/medal-service/genproto/medal_service"
 	"olympy/medal-service/internal/config"
 
 	"google.golang.org/grpc"
@@ -12,11 +12,11 @@ import (
 
 type (
 	API struct {
-		service genprotos.ProductServiceServer
+		service modelservice.MedalServiceServer
 	}
 )
 
-func New(service genprotos.ProductServiceServer) *API {
+func New(service modelservice.MedalServiceServer) *API {
 	return &API{
 		service: service,
 	}
@@ -29,7 +29,7 @@ func (a *API) RUN(config *config.Config) error {
 	}
 
 	serverRegisterer := grpc.NewServer()
-	genprotos.RegisterProductServiceServer(serverRegisterer, a.service)
+	modelservice.RegisterMedalServiceServer(serverRegisterer, a.service)
 
 	log.Println("server has started running on port", config.Server.Port)
 

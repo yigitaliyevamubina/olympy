@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
+	
+	medalproto "olympy/medal-service/genproto/medal_service"
 	"github.com/google/uuid"
 )
 
@@ -28,7 +30,7 @@ func New(config *config.Config) (*Medal, error) {
 	}, nil
 }
 
-func (m *Medal) AddMedal(ctx context.Context, req *genprotos.Medal) (*genprotos.Medal, error) {
+func (m *Medal) AddMedal(ctx context.Context, req *medalproto.Medal) (*medalproto.Medal, error) {
 	data := map[string]interface{}{
 		"id":         uuid.New().ID(),
 		"country_id": req.CountryId,
@@ -50,7 +52,7 @@ func (m *Medal) AddMedal(ctx context.Context, req *genprotos.Medal) (*genprotos.
 		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
 	}
 
-	return &genprotos.Medal{
+	return &medalproto.Medal{
 		Id:        data["id"].(int64),
 		CountryId: req.CountryId,
 		Type:      req.Type,
@@ -61,7 +63,7 @@ func (m *Medal) AddMedal(ctx context.Context, req *genprotos.Medal) (*genprotos.
 	}, nil
 }
 
-func (m *Medal) EditMedal(ctx context.Context, req *genprotos.Medal) (*genprotos.Medal, error) {
+func (m *Medal) EditMedal(ctx context.Context, req *medalproto.Medal) (*medalproto.Medal, error) {
 	data := map[string]interface{}{
 		"country_id": req.CountryId,
 		"type":       req.Type,
@@ -82,7 +84,7 @@ func (m *Medal) EditMedal(ctx context.Context, req *genprotos.Medal) (*genprotos
 		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
 	}
 
-	var updatedMedal genprotos.Medal
+	var updatedMedal medalproto.Medal
 	err = m.db.QueryRowContext(ctx, "SELECT id, country_id, type, event_id, athlete_id, created_at, updated_at FROM medals WHERE id = $1", req.Id).
 		Scan(&updatedMedal.Id, &updatedMedal.CountryId, &updatedMedal.Type, &updatedMedal.EventId, &updatedMedal.AthleteId, &updatedMedal.CreatedAt, &updatedMedal.UpdatedAt)
 	if err != nil {
@@ -92,7 +94,7 @@ func (m *Medal) EditMedal(ctx context.Context, req *genprotos.Medal) (*genprotos
 	return &updatedMedal, nil
 }
 
-func (m *Medal) DeleteMedal(ctx context.Context, req *genprotos.GetSingleRequest) (*genprotos.Message, error) {
+func (m *Medal) DeleteMedal(ctx context.Context, req *medalproto.GetSingleRequest) (*medalproto.Message, error) {
 	query, args, err := m.queryBuilder.Delete("medals").
 		Where(squirrel.Eq{"id": req.Id}).
 		ToSql()
@@ -114,11 +116,11 @@ func (m *Medal) DeleteMedal(ctx context.Context, req *genprotos.GetSingleRequest
 		return nil, fmt.Errorf("medal with ID %d not found", req.Id)
 	}
 
-	return &genprotos.Message{Message: fmt.Sprintf("Medal with ID %d deleted successfully", req.Id)}, nil
+	return &medalproto.Message{Message: fmt.Sprintf("Medal with ID %d deleted successfully", req.Id)}, nil
 }
 
-func (m *Medal) GetMedal(ctx context.Context, req *genprotos.GetSingleRequest) (*genprotos.Medal, error) {
-	var medal genprotos.Medal
+func (m *Medal) GetMedal(ctx context.Context, req *medalproto.GetSingleRequest) (*medalproto.Medal, error) {
+	var medal medalproto.Medal
 	err := m.db.QueryRowContext(ctx, "SELECT id, country_id, type, event_id, athlete_id, created_at, updated_at FROM medals WHERE id = $1", req.Id).
 		Scan(&medal.Id, &medal.CountryId, &medal.Type, &medal.EventId, &medal.AthleteId, &medal.CreatedAt, &medal.UpdatedAt)
 	if err != nil {
@@ -128,8 +130,8 @@ func (m *Medal) GetMedal(ctx context.Context, req *genprotos.GetSingleRequest) (
 	return &medal, nil
 }
 
-func (m *Medal) GetAllMedals(ctx context.Context, req *genprotos.ListRequest) (*genprotos.ListResponse, error) {
-	var medals []*genprotos.Medal
+func (m *Medal) GetAllMedals(ctx context.Context, req *medalproto.ListRequest) (*medalproto.ListResponse, error) {
+	var medals []*medalproto.Medal
 	var total int64
 
 	query := squirrel.Select("id", "country_id", "type", "event_id", "athlete_id", "created_at", "updated_at").
@@ -154,7 +156,7 @@ func (m *Medal) GetAllMedals(ctx context.Context, req *genprotos.ListRequest) (*
 	defer rows.Close()
 
 	for rows.Next() {
-		var medal genprotos.Medal
+		var medal medalproto.Medal
 		err := rows.Scan(&medal.Id, &medal.CountryId, &medal.Type, &medal.EventId, &medal.AthleteId, &medal.CreatedAt, &medal.UpdatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan medal row: %v", err)
@@ -167,7 +169,7 @@ func (m *Medal) GetAllMedals(ctx context.Context, req *genprotos.ListRequest) (*
 		return nil, fmt.Errorf("failed to get total number of medals: %v", err)
 	}
 
-	return &genprotos.ListResponse{
+	return &medalproto.ListResponse{
 		Count:  total,
 		Medals: medals,
 	}, nil

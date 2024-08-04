@@ -11,7 +11,7 @@ for module in $(find "$CURRENT_DIR"/protos/* -type d); do
 done;
 
 # shellcheck disable=SC2044
-for module in $(find "$CURRENT_DIR"/genprotos/* -type d); do
+for module in $(find "$CURRENT_DIR"/genproto/* -type d); do
   if [[ "$OSTYPE" == "darwin"* ]]; then
     sed -i "" -e "s/,omitempty//g" "$module"/*.go
   else

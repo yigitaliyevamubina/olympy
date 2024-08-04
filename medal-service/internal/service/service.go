@@ -3,14 +3,14 @@ package service
 import (
 	"context"
 	"log"
-	"olympy/medal-service/genprotos"
+	modelservice "olympy/medal-service/genproto/medal_service"
 	"olympy/medal-service/internal/storage"
 	"os"
 )
 
 type (
 	MedalService struct {
-		genprotos.UnimplementedMedalServiceServer
+		modelservice.UnimplementedMedalServiceServer
 		medalStorage storage.Medal
 		logger       *log.Logger
 	}
@@ -23,27 +23,27 @@ func New(service storage.Medal) *MedalService {
 	}
 }
 
-func (s *MedalService) AddMedal(ctx context.Context, req *genprotos.AddMedalRequest) (*genprotos.AddMedalResponse, error) {
+func (s *MedalService) AddMedal(ctx context.Context, req *modelservice.Medal) (*modelservice.Medal, error) {
 	s.logger.Println("Add Medal Request")
 	return s.medalStorage.AddMedal(ctx, req)
 }
 
-func (s *MedalService) EditMedal(ctx context.Context, req *genprotos.EditMedalRequest) (*genprotos.EditMedalResponse, error) {
+func (s *MedalService) EditMedal(ctx context.Context, req *modelservice.Medal) (*modelservice.Medal, error) {
 	s.logger.Println("Edit Medal Request")
 	return s.medalStorage.EditMedal(ctx, req)
 }
 
-func (s *MedalService) DeleteMedal(ctx context.Context, req *genprotos.DeleteMedalRequest) (*genprotos.Message, error) {
+func (s *MedalService) DeleteMedal(ctx context.Context, req *modelservice.GetSingleRequest) (*modelservice.Message, error) {
 	s.logger.Println("Delete Medal Request")
 	return s.medalStorage.DeleteMedal(ctx, req)
 }
 
-func (s *MedalService) GetMedal(ctx context.Context, req *genprotos.GetMedalRequest) (*genprotos.GetMedalResponse, error) {
+func (s *MedalService) GetMedal(ctx context.Context, req *modelservice.GetSingleRequest) (*modelservice.Medal, error) {
 	s.logger.Println("Get Medal Request")
 	return s.medalStorage.GetMedal(ctx, req)
 }
 
-func (s *MedalService) ListMedals(ctx context.Context, req *genprotos.ListMedalsRequest) (*genprotos.ListMedalsResponse, error) {
+func (s *MedalService) ListMedals(ctx context.Context, req *modelservice.ListRequest) (*modelservice.ListResponse, error) {
 	s.logger.Println("List Medals Request")
 	return s.medalStorage.GetAllMedals(ctx, req)
 }
