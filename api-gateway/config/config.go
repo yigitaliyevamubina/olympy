@@ -9,7 +9,7 @@ import (
 type (
 	Config struct {
 		AuthHost      string
-		ProductHost   string
+		EventHost     string
 		AiService     string
 		ServerAddress string
 	}
@@ -20,7 +20,7 @@ func (c *Config) Load() error {
 		return err
 	}
 	c.AuthHost = os.Getenv("AUTH_HOST")
-	c.ProductHost = os.Getenv("PRODUCT_HOST")
+	c.EventHost = os.Getenv("EVENT_HOST")
 	c.AiService = os.Getenv("AI_SERVICE")
 	c.ServerAddress = os.Getenv("SERVER_ADDRESS")
 	return nil

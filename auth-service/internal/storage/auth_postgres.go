@@ -1,278 +1,160 @@
 package storage
 
 import (
-	"armiya/equipment-service/genprotos"
-	"armiya/equipment-service/internal/config"
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 
-	sq "github.com/Masterminds/squirrel"
+	"github.com/Masterminds/squirrel"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
-	"github.com/k0kubun/pp"
+	"golang.org/x/crypto/bcrypt"
+
+	genprotos "COMPETITIONS/olympy/auth-service/genprotos"
+	"COMPETITIONS/olympy/auth-service/internal/config"
 )
 
-type (
-	Auth struct {
-		db           *sql.DB
-		queryBuilder sq.StatementBuilderType
-	}
-)
+type AuthService struct {
+	db              *sql.DB
+	queryBuilder    squirrel.StatementBuilderType
+	jwtSecret       string
+	accessTokenExp  time.Duration
+	refreshTokenExp time.Duration
+}
 
-func New(config *config.Config) (*Auth, error) {
-	db, err := ConnectDB(*config)
+func NewAuthService(cfg *config.Config) (*AuthService, error) {
+	db, err := ConnectDB(*cfg)
 	if err != nil {
-		pp.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("failed to connect to DB: %v", err)
 	}
 
-	return &Auth{
-		db:           db,
-		queryBuilder: sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
+	return &AuthService{
+		db:              db,
+		queryBuilder:    squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
+		jwtSecret:       cfg.JWT.Secret,
+		accessTokenExp:  cfg.JWT.AccessTokenExp,
+		refreshTokenExp: cfg.JWT.RefreshTokenExp,
 	}, nil
 }
 
-func (e *Auth) Register(ctx context.Context, req *genprotos.RegisterRequest) (*genprotos.RegisterResponse, error) {
-	data := map[string]interface{}{
-		"id":         uuid.NewString(),
-		"username":   req.Username,
-		"email":      req.Email,
-		"password":   req.Password,
-		"full_name":  req.FullName,
-		"user_type":  req.UserType,
-		"created_at": time.Now(),
-		"updated_at": time.Now(),
+func (a *AuthService) RegisterUser(ctx context.Context, req *genprotos.RegisterUserRequest) (*genprotos.RegisterUserResponse, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, fmt.Errorf("failed to hash password: %v", err)
 	}
-	query, args, err := e.queryBuilder.Insert("users").
+
+	data := map[string]interface{}{
+		"id":       uuid.NewString(),
+		"username": req.Username,
+		"password": string(hashedPassword),
+		"role":     req.Role,
+	}
+
+	query, args, err := a.queryBuilder.Insert("users").
 		SetMap(data).
 		ToSql()
 	if err != nil {
-		pp.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("failed to build SQL query: %v", err)
 	}
 
-	if _, err = e.db.ExecContext(ctx, query, args...); err != nil {
-		pp.Println(err)
-		return nil, err
+	if _, err := a.db.ExecContext(ctx, query, args...); err != nil {
+		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
 	}
 
-	return &genprotos.RegisterResponse{
-		Id:        data["id"].(string),
-		Username:  req.Username,
-		Email:     req.Email,
-		Password:  req.Password,
-		FullName:  req.FullName,
-		UserType:  req.UserType,
-		CreatedAt: data["created_at"].(time.Time).String(),
+	return &genprotos.RegisterUserResponse{
+		User: &genprotos.User{
+			Id:       data["id"].(string),
+			Username: req.Username,
+			Role:     req.Role,
+		},
+		Message: "User registered successfully",
 	}, nil
 }
 
-func (e *Auth) Login(ctx context.Context, req *genprotos.LoginRequest) (*genprotos.LoginResponse, error) {
-	query, args, err := e.queryBuilder.Select("password").
-		From("users").
-		Where(sq.Eq{"email": req.Email}).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	var storedPassword string
-	err = e.db.QueryRowContext(ctx, query, args...).Scan(&storedPassword)
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	if storedPassword != req.Password {
-		return &genprotos.LoginResponse{True: false}, nil
-	}
-
-	return &genprotos.LoginResponse{True: true}, nil
-}
-
-func (e *Auth) ShowProfile(ctx context.Context, req *genprotos.ShowProfileRequest) (*genprotos.ShowProfileResponse, error) {
-	query, args, err := e.queryBuilder.Select("id", "username", "email", "password", "full_name", "user_type", "created_at", "updated_at").
-		From("users").
-		Where(sq.Eq{"id": req.Id}).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	var user genprotos.ShowProfileResponse
-	err = e.db.QueryRowContext(ctx, query, args...).Scan(
-		&user.Id, &user.Username, &user.Email, &user.Password, &user.FullName,
-		&user.UserType, &user.CreatedAt, &user.UpdatedAt,
+func (a *AuthService) LoginUser(ctx context.Context, req *genprotos.LoginUserRequest) (*genprotos.LoginUserResponse, error) {
+	var (
+		hashedPassword string
+		role           string
+		userId         string
 	)
+
+	err := a.db.QueryRowContext(ctx, "SELECT id, password, role FROM users WHERE username = $1", req.Username).
+		Scan(&userId, &hashedPassword, &role)
 	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-func (e *Auth) EditProfile(ctx context.Context, req *genprotos.EditProfileRequest) (*genprotos.EditProfileResponse, error) {
-	data := map[string]interface{}{
-		"full_name":  req.FullName,
-		"bio":        req.Bio,
-		"updated_at": time.Now(),
-	}
-
-	query, args, err := e.queryBuilder.Update("users").
-		SetMap(data).
-		Where(sq.Eq{"id": req.Id}).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	_, err = e.db.ExecContext(ctx, query, args...)
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	selectQuery, selectArgs, err := e.queryBuilder.Select("username", "email", "password", "full_name", "user_type", "created_at").
-		From("users").
-		Where(sq.Eq{"id": req.Id}).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	var response genprotos.EditProfileResponse
-	err = e.db.QueryRowContext(ctx, selectQuery, selectArgs...).Scan(
-		&response.Username, &response.Email, &response.Password, &response.FullName,
-		&response.UserType, &response.CreatedAt,
-	)
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	response.Id = req.Id
-
-	return &response, nil
-}
-
-func (e *Auth) EditUserType(ctx context.Context, req *genprotos.EditUserTypeRequest) (*genprotos.EditUserTypeResponse, error) {
-	var username string
-	data := map[string]interface{}{
-		"user_type":  req.UserType,
-		"updated_at": time.Now(),
-	}
-
-	selectQuery, args, err := e.queryBuilder.Select("username").
-		From("users").
-		Where(sq.Eq{
-			"id": req.Id,
-		}).ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	if err = e.db.QueryRow(selectQuery, args...).Scan(&username); err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	query, args, err := e.queryBuilder.Update("users").
-		SetMap(data).
-		Where(sq.Eq{"id": req.Id}).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	_, err = e.db.ExecContext(ctx, query, args...)
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	return &genprotos.EditUserTypeResponse{
-		Id:        req.Id,
-		Username:  username,
-		UserType:  req.UserType,
-		UpdatedAt: time.Now().String(),
-	}, nil
-}
-
-func (e *Auth) GetAllUsers(ctx context.Context, req *genprotos.GetAllUsersRequest) (*genprotos.GetAllUsersResponse, error) {
-	offset := (req.Page - 1) * req.Limit
-	query, args, err := e.queryBuilder.Select("id", "username", "full_name", "user_type").
-		From("users").
-		Limit(req.Limit).
-		Offset(offset).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	rows, err := e.db.QueryContext(ctx, query, args...)
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-	defer rows.Close()
-
-	var users []*genprotos.User
-	for rows.Next() {
-		var user genprotos.User
-		if err := rows.Scan(&user.Id, &user.Username, &user.FullName, &user.UserType); err != nil {
-			pp.Println(err)
-			return nil, err
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("username not found")
 		}
-		users = append(users, &user)
+		return nil, fmt.Errorf("failed to fetch user: %v", err)
 	}
 
-	query, args, err = e.queryBuilder.Select("COUNT(*)").From("users").ToSql()
+	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(req.Password))
 	if err != nil {
-		pp.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("invalid password")
 	}
 
-	var total uint64
-	err = e.db.QueryRowContext(ctx, query, args...).Scan(&total)
+	accessToken, err := a.generateToken(userId, role, a.accessTokenExp)
 	if err != nil {
-		pp.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("failed to generate access token: %v", err)
 	}
 
-	return &genprotos.GetAllUsersResponse{
-		Users: users,
-		Total: total,
-		Page:  req.Page,
-		Limit: req.Limit,
+	refreshToken, err := a.generateToken(userId, role, a.refreshTokenExp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate refresh token: %v", err)
+	}
+
+	return &genprotos.LoginUserResponse{
+		User: &genprotos.User{
+			Id:       userId,
+			Username: req.Username,
+			Role:     role,
+		},
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		Message:      "Login successful",
 	}, nil
 }
 
-func (e *Auth) DeleteUser(ctx context.Context, req *genprotos.DeleteUserRequest) (*genprotos.AuthMessage, error) {
-	query, args, err := e.queryBuilder.Delete("users").
-		Where(sq.Eq{"id": req.Id}).
-		ToSql()
-	if err != nil {
-		pp.Println(err)
-		return nil, err
+func (a *AuthService) generateToken(userId, role string, expiration time.Duration) (string, error) {
+	claims := jwt.MapClaims{
+		"user_id": userId,
+		"role":    role,
+		"exp":     time.Now().Add(expiration).Unix(),
 	}
-
-	_, err = e.db.ExecContext(ctx, query, args...)
-	if err != nil {
-		pp.Println(err)
-		return nil, err
-	}
-
-	return &genprotos.AuthMessage{Message: "User deleted successfully"}, nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(a.jwtSecret))
 }
 
-func (e *Auth) ResetPassword(ctx context.Context, req *genprotos.ResetPasswordRequest) (*genprotos.AuthMessage, error) {
-	return &genprotos.AuthMessage{Message: "Password reset send to your email."}, nil
+func (a *AuthService) RefreshToken(ctx context.Context, req *genprotos.RefreshTokenRequest) (*genprotos.RefreshTokenResponse, error) {
+	token, err := jwt.Parse(req.RefreshToken, func(token *jwt.Token) (interface{}, error) {
+		return []byte(a.jwtSecret), nil
+	})
+	if err != nil || !token.Valid {
+		return nil, fmt.Errorf("invalid refresh token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, fmt.Errorf("invalid token claims")
+	}
+
+	userId, ok := claims["user_id"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid user ID")
+	}
+
+	role, ok := claims["role"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid role")
+	}
+
+	// Generate a new access token
+	accessToken, err := a.generateToken(userId, role, a.accessTokenExp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate new access token: %v", err)
+	}
+
+	return &genprotos.RefreshTokenResponse{
+		AccessToken: accessToken,
+	}, nil
 }

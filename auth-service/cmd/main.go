@@ -1,10 +1,10 @@
 package main
 
 import (
-	"armiya/equipment-service/api"
-	"armiya/equipment-service/internal/config"
-	"armiya/equipment-service/internal/service"
-	"armiya/equipment-service/internal/storage"
+	"COMPETITIONS/olympy/auth-service/api"
+	"COMPETITIONS/olympy/auth-service/internal/config"
+	"COMPETITIONS/olympy/auth-service/internal/service"
+	"COMPETITIONS/olympy/auth-service/internal/storage"
 	"log"
 	"os"
 
@@ -22,12 +22,12 @@ func main() {
 
 	migrateDB()
 
-	storage, err := storage.New(configs)
+	storage, err := storage.NewAuthService(configs)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	api := api.New(service.New(*storage))
+	api := api.New(service.NewAuthServiceServer(storage))
 
 	log.Fatal(api.RUN(configs))
 }

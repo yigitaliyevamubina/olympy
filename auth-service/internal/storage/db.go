@@ -1,12 +1,12 @@
 package storage
 
 import (
+	"COMPETITIONS/olympy/auth-service/internal/config"
 	"database/sql"
 	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
-	"armiya/equipment-service/internal/config"
 )
 
 func ConnectDB(config config.Config) (*sql.DB, error) {

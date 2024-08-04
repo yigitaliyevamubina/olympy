@@ -1,64 +1,38 @@
 package service
 
 import (
-	"armiya/equipment-service/genprotos"
-	"armiya/equipment-service/internal/storage"
+	"COMPETITIONS/olympy/auth-service/internal/storage"
 	"context"
-	"log"
-	"os"
+	"fmt"
+
+	genprotos "COMPETITIONS/olympy/auth-service/genprotos"
 )
 
-type (
-	AuthService struct {
-		genprotos.UnimplementedAuthServiceServer
-		authService storage.Auth
-		logger      *log.Logger
-	}
-)
+type AuthServiceServer struct {
+	genprotos.UnimplementedAuthServiceServer
+	authStorage *storage.AuthService
+}
 
-func New(service storage.Auth) *AuthService {
-	return &AuthService{
-		authService: service,
-		logger:      log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
+func NewAuthServiceServer(authStorage *storage.AuthService) *AuthServiceServer {
+	return &AuthServiceServer{
+		authStorage: authStorage,
 	}
 }
 
-func (s *AuthService) Register(ctx context.Context, req *genprotos.RegisterRequest) (*genprotos.RegisterResponse, error) {
-	s.logger.Println("Register request")
-	return s.authService.Register(ctx, req)
+// RegisterUser handles user registration
+func (s *AuthServiceServer) RegisterUser(ctx context.Context, req *genprotos.RegisterUserRequest) (*genprotos.RegisterUserResponse, error) {
+	resp, err := s.authStorage.RegisterUser(ctx, req)
+	if err != nil {
+		return nil, fmt.Errorf("error during user registration: %v", err)
+	}
+	return resp, nil
 }
 
-func (s *AuthService) Login(ctx context.Context, req *genprotos.LoginRequest) (*genprotos.LoginResponse, error) {
-	s.logger.Println("Login request")
-	return s.authService.Login(ctx, req)
-}
-
-func (s *AuthService) ShowProfile(ctx context.Context, req *genprotos.ShowProfileRequest) (*genprotos.ShowProfileResponse, error) {
-	s.logger.Println("Show Profile request")
-	return s.authService.ShowProfile(ctx, req)
-}
-
-func (s *AuthService) EditProfile(ctx context.Context, req *genprotos.EditProfileRequest) (*genprotos.EditProfileResponse, error) {
-	s.logger.Println("Edit Profile request")
-	return s.authService.EditProfile(ctx, req)
-}
-
-func (s *AuthService) EditUserType(ctx context.Context, req *genprotos.EditUserTypeRequest) (*genprotos.EditUserTypeResponse, error) {
-	s.logger.Println("Edit User Type request")
-	return s.authService.EditUserType(ctx, req)
-}
-
-func (s *AuthService) GetAllUsers(ctx context.Context, req *genprotos.GetAllUsersRequest) (*genprotos.GetAllUsersResponse, error) {
-	s.logger.Println("Get All Users request")
-	return s.authService.GetAllUsers(ctx, req)
-}
-
-func (s *AuthService) DeleteUser(ctx context.Context, req *genprotos.DeleteUserRequest) (*genprotos.AuthMessage, error) {
-	s.logger.Println("Delete User request")
-	return s.authService.DeleteUser(ctx, req)
-}
-
-func (s *AuthService) ResetPassword(ctx context.Context, req *genprotos.ResetPasswordRequest) (*genprotos.AuthMessage, error) {
-	s.logger.Println("Reset Password request")
-	return s.authService.ResetPassword(ctx, req)
+// LoginUser handles user login
+func (s *AuthServiceServer) LoginUser(ctx context.Context, req *genprotos.LoginUserRequest) (*genprotos.LoginUserResponse, error) {
+	resp, err := s.authStorage.LoginUser(ctx, req)
+	if err != nil {
+		return nil, fmt.Errorf("error during user login: %v", err)
+	}
+	return resp, nil
 }

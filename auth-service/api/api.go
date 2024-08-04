@@ -1,11 +1,10 @@
 package api
 
 import (
+	genprotos "COMPETITIONS/olympy/auth-service/genprotos"
+	"COMPETITIONS/olympy/auth-service/internal/config"
 	"log"
 	"net"
-
-	"armiya/equipment-service/genprotos"
-	"armiya/equipment-service/internal/config"
 
 	"google.golang.org/grpc"
 )

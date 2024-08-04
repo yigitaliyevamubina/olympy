@@ -1,9 +1,9 @@
 generate-rpc:
 	protoc \
-	--go_out=. \
-	--go-grpc_out=. \
+	--go_out=genprotos \
+	--go-grpc_out=genprotos \
+	protos/event-protos/event.proto \
 	protos/auth-protos/auth.proto \
-	protos/product-protos/product.proto
 
 
 swag:
