@@ -2,7 +2,7 @@ package authhandlers
 
 import (
 	"log"
-	genprotos "olympy/api-gateway/genprotos"
+	genprotos "olympy/api-gateway/genproto/auth_service"
 
 	"github.com/gin-gonic/gin"
 )

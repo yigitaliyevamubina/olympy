@@ -1,11 +1,11 @@
 package service
 
 import (
-	"COMPETITIONS/olympy/auth-service/internal/storage"
 	"context"
 	"fmt"
+	"olympy/auth-service/internal/storage"
 
-	genprotos "COMPETITIONS/olympy/auth-service/genprotos"
+	genprotos "olympy/auth-service/genproto/auth_service"
 )
 
 type AuthServiceServer struct {

@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
-	genprotos "COMPETITIONS/olympy/auth-service/genprotos"
-	"COMPETITIONS/olympy/auth-service/internal/config"
+	genprotos "olympy/auth-service/genproto/auth_service"
+	"olympy/auth-service/internal/config"
 )
 
 type AuthService struct {

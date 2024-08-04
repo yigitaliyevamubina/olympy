@@ -2,17 +2,17 @@ package eventhandlers
 
 import (
 	"log"
-	genprotos "olympy/api-gateway/genprotos"
+	eventservice "olympy/api-gateway/genproto/event_service"
 
 	"github.com/gin-gonic/gin"
 )
 
 type EventHandlers struct {
-	client genprotos.EventServiceClient
+	client eventservice.EventServiceClient
 	logger *log.Logger
 }
 
-func NewEventHandlers(client genprotos.EventServiceClient, logger *log.Logger) *EventHandlers {
+func NewEventHandlers(client eventservice.EventServiceClient, logger *log.Logger) *EventHandlers {
 	return &EventHandlers{
 		client: client,
 		logger: logger,
@@ -24,13 +24,13 @@ func NewEventHandlers(client genprotos.EventServiceClient, logger *log.Logger) *
 // @Description This endpoint adds a new event.
 // @Accept json
 // @Produce json
-// @Param request body genprotos.AddEventRequest true "Event details to add"
-// @Success 200 {object} genprotos.AddEventResponse
-// @Failure 400 {object} genprotos.Message
-// @Failure 500 {object} genprotos.Message
+// @Param request body eventservice.AddEventRequest true "Event details to add"
+// @Success 200 {object} eventservice.AddEventResponse
+// @Failure 400 {object} eventservice.Message
+// @Failure 500 {object} eventservice.Message
 // @Router /events/add [post]
 func (e *EventHandlers) AddEvent(ctx *gin.Context) {
-	var req genprotos.AddEventRequest
+	var req eventservice.AddEventRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
@@ -51,13 +51,13 @@ func (e *EventHandlers) AddEvent(ctx *gin.Context) {
 // @Description This endpoint edits an existing event.
 // @Accept json
 // @Produce json
-// @Param request body genprotos.EditEventRequest true "Event details to edit"
-// @Success 200 {object} genprotos.EditEventResponse
-// @Failure 400 {object} genprotos.Message
-// @Failure 500 {object} genprotos.Message
+// @Param request body eventservice.EditEventRequest true "Event details to edit"
+// @Success 200 {object} eventservice.EditEventResponse
+// @Failure 400 {object} eventservice.Message
+// @Failure 500 {object} eventservice.Message
 // @Router /events/edit [post]
 func (e *EventHandlers) EditEvent(ctx *gin.Context) {
-	var req genprotos.EditEventRequest
+	var req eventservice.EditEventRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
@@ -78,13 +78,13 @@ func (e *EventHandlers) EditEvent(ctx *gin.Context) {
 // @Description This endpoint deletes an event by its ID.
 // @Accept json
 // @Produce json
-// @Param request body genprotos.DeleteEventRequest true "Event ID to delete"
-// @Success 200 {object} genprotos.Message
-// @Failure 400 {object} genprotos.Message
-// @Failure 500 {object} genprotos.Message
+// @Param request body eventservice.DeleteEventRequest true "Event ID to delete"
+// @Success 200 {object} eventservice.Message
+// @Failure 400 {object} eventservice.Message
+// @Failure 500 {object} eventservice.Message
 // @Router /events/delete [post]
 func (e *EventHandlers) DeleteEvent(ctx *gin.Context) {
-	var req genprotos.DeleteEventRequest
+	var req eventservice.DeleteEventRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
@@ -105,13 +105,13 @@ func (e *EventHandlers) DeleteEvent(ctx *gin.Context) {
 // @Description This endpoint retrieves an event by its ID.
 // @Accept json
 // @Produce json
-// @Param request body genprotos.GetEventRequest true "Event ID to retrieve"
-// @Success 200 {object} genprotos.GetEventResponse
-// @Failure 400 {object} genprotos.Message
-// @Failure 500 {object} genprotos.Message
+// @Param request body eventservice.GetEventRequest true "Event ID to retrieve"
+// @Success 200 {object} eventservice.GetEventResponse
+// @Failure 400 {object} eventservice.Message
+// @Failure 500 {object} eventservice.Message
 // @Router /events/get [post]
 func (e *EventHandlers) GetEvent(ctx *gin.Context) {
-	var req genprotos.GetEventRequest
+	var req eventservice.GetEventRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
@@ -132,13 +132,13 @@ func (e *EventHandlers) GetEvent(ctx *gin.Context) {
 // @Description This endpoint retrieves all events with pagination.
 // @Accept json
 // @Produce json
-// @Param request body genprotos.GetAllEventsRequest true "Pagination parameters"
-// @Success 200 {object} genprotos.GetAllEventsResponse
-// @Failure 400 {object} genprotos.Message
-// @Failure 500 {object} genprotos.Message
+// @Param request body eventservice.GetAllEventsRequest true "Pagination parameters"
+// @Success 200 {object} eventservice.GetAllEventsResponse
+// @Failure 400 {object} eventservice.Message
+// @Failure 500 {object} eventservice.Message
 // @Router /events/getall [post]
 func (e *EventHandlers) GetAllEvents(ctx *gin.Context) {
-	var req genprotos.GetAllEventsRequest
+	var req eventservice.GetAllEventsRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
@@ -159,13 +159,13 @@ func (e *EventHandlers) GetAllEvents(ctx *gin.Context) {
 // @Description This endpoint searches events by query with pagination.
 // @Accept json
 // @Produce json
-// @Param request body genprotos.SearchEventsRequest true "Search parameters"
-// @Success 200 {object} genprotos.GetAllEventsResponse
-// @Failure 400 {object} genprotos.Message
-// @Failure 500 {object} genprotos.Message
+// @Param request body eventservice.SearchEventsRequest true "Search parameters"
+// @Success 200 {object} eventservice.GetAllEventsResponse
+// @Failure 400 {object} eventservice.Message
+// @Failure 500 {object} eventservice.Message
 // @Router /events/search [post]
 func (e *EventHandlers) SearchEvents(ctx *gin.Context) {
-	var req genprotos.SearchEventsRequest
+	var req eventservice.SearchEventsRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.IndentedJSON(400, gin.H{"error": err.Error()})

@@ -30,15 +30,17 @@ migrate-file: generate-env ### create a new migration file
 .PHONY: migrate-file
 
 proto:
-	protoc --go_out=genprotos \
-  		--go-grpc_out=genprotos \
-  		--proto_path=protos \
-  		auth.proto
+	./scripts/gen-proto.sh
 
 
 give-permissions:
 	- chmod +x additional.sh
 	- chmod +x generate_db_url.sh
+
+
+.PHONY: migrate run
+
+.PHONY: migrate run
 
 psql:
 	psql -U postgres -d postgres

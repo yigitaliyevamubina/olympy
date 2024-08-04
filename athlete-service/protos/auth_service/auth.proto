@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package auth_service;
+
+service AuthService {
+  rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+}
+
+message User {
+  string id = 1;
+  string username = 2;
+  string role = 3;
+}
+
+message RegisterUserRequest {
+  string username = 1;
+  string password = 2;
+  string role = 3; // e.g., "user", "admin"
+}
+
+message RegisterUserResponse {
+  User user = 1;
+  string message = 2; // Success or error message
+}
+
+message LoginUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginUserResponse {
+  User user = 1;
+  string access_token = 2; // JWT access token
+  string refresh_token = 3; // JWT refresh token
+  string message = 4; // Success or error message
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1; // JWT refresh token
+}
+
+message RefreshTokenResponse {
+  string access_token = 1; // New JWT access token
+  string message = 2; // Success or error message
+}

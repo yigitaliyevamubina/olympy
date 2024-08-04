@@ -1,10 +1,10 @@
 package api
 
 import (
-	genprotos "COMPETITIONS/olympy/event-service/genprotos"
-	"COMPETITIONS/olympy/event-service/internal/config"
 	"log"
 	"net"
+	genprotos "olympy/event-service/genproto/event_service"
+	"olympy/event-service/internal/config"
 
 	"google.golang.org/grpc"
 )

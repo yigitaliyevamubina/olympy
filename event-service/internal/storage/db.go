@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"COMPETITIONS/olympy/event-service/internal/config"
+	"olympy/event-service/internal/config"
 	"database/sql"
 	"fmt"
 	"log"

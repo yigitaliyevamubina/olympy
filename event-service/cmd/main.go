@@ -1,10 +1,10 @@
 package main
 
 import (
-	"COMPETITIONS/olympy/event-service/api"
-	"COMPETITIONS/olympy/event-service/internal/config"
-	service "COMPETITIONS/olympy/event-service/internal/service"
-	"COMPETITIONS/olympy/event-service/internal/storage"
+	"olympy/event-service/api"
+	"olympy/event-service/internal/config"
+	service "olympy/event-service/internal/service"
+	"olympy/event-service/internal/storage"
 	"log"
 	"os"
 

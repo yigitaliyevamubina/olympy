@@ -1,10 +1,10 @@
 package main
 
 import (
-	"COMPETITIONS/olympy/auth-service/api"
-	"COMPETITIONS/olympy/auth-service/internal/config"
-	"COMPETITIONS/olympy/auth-service/internal/service"
-	"COMPETITIONS/olympy/auth-service/internal/storage"
+	"olympy/auth-service/api"
+	"olympy/auth-service/internal/config"
+	"olympy/auth-service/internal/service"
+	"olympy/auth-service/internal/storage"
 	"log"
 	"os"
 

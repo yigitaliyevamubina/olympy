@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package athlete_service;
+
+service AthleteService {
+    rpc AddAthlete(Athlete) returns (Athlete);
+    rpc EditAthlete(Athlete) returns (Athlete);
+    rpc DeleteAthlete(GetSingleRequest) returns (Message);
+    rpc ListAthletes(ListRequest) returns (ListResponse);
+    rpc GetAthlete(GetSingleRequest) returns (Athlete);
+}
+
+message Athlete {
+    int64 id = 1;
+    string name = 2;
+    int64 country_id = 3;
+    string sport_type = 4;
+    string created_at = 5;
+    string updated_at = 6;
+}
+
+message GetSingleRequest {
+    int64 id = 1;
+}
+
+message ListRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int64 country_id = 3; // Optional filter
+    string sport_type = 4; // Optional filter
+}
+
+message ListResponse {
+    int64 count = 1;
+    repeated Athlete athletes = 2;
+}
+
+message Message {
+    string message = 1;
+}

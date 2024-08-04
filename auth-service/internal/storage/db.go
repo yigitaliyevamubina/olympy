@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"COMPETITIONS/olympy/auth-service/internal/config"
+	"olympy/auth-service/internal/config"
 	"database/sql"
 	"fmt"
 	"log"

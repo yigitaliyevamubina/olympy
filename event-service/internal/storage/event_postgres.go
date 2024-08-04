@@ -1,11 +1,11 @@
 package storage
 
 import (
-	genprotos "COMPETITIONS/olympy/event-service/genprotos"
-	"COMPETITIONS/olympy/event-service/internal/config"
 	"context"
 	"database/sql"
 	"fmt"
+	genprotos "olympy/event-service/genproto/event_service"
+	"olympy/event-service/internal/config"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
