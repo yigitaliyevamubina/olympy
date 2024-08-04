@@ -32,7 +32,7 @@ git clone <git@github.com:yigitaliyevamubina/olympy.git>
 ### Navigate to the Project Directory:
 
 ```bash
-cd olympic-management-api
+cd olympy
 
 ```
 
