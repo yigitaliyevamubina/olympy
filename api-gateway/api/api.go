@@ -75,7 +75,7 @@ func (a *API) RUN() error {
 		api.DELETE("/medals/delete/:id", a.medalhandler.DeleteMedal) // Delete medal by ID
 		api.GET("/medals/get/:id", a.medalhandler.GetMedal)          // Get medal by ID
 		api.POST("/medals/getall", a.medalhandler.ListMedals)        // List medals
-		api.POST("/medals/ranking", a.medalhandler.GetMedalRanking)  // Get country rankings sorted by the number of medals
+		api.GET("/medals/ranking", a.medalhandler.GetMedalRanking)  // Get country rankings sorted by the number of medals
 	}
 
 	return router.Run(a.cfg.ServerAddress)

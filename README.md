@@ -101,7 +101,7 @@ Manage medals with the following endpoints:
 - **Delete Medal:** `DELETE /api/v1/medals/delete/:id`
 - **Get Medal:** `GET /api/v1/medals/get/:id`
 - **List Medals:** `POST /api/v1/medals/getall`
-- **Country Ranking:** `POST /api/v1/medals/ranking`
+- **Country Ranking:** `GET /api/v1/medals/ranking`
 
 ## Error Handling
 
