@@ -114,3 +114,14 @@ INSERT INTO medals (country_id, type, event_id, athlete_id) VALUES
 (8, 'Silver', 3, 8),
 (9, 'Bronze', 3, 9),
 (10, 'Gold', 4, 10);
+
+
+-- 20240804_create_events_table.sql
+CREATE TABLE IF NOT EXISTS events (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    sport_type VARCHAR(100) NOT NULL,
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL
+);
+

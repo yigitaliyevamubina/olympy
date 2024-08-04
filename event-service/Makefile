@@ -30,10 +30,10 @@ migrate-file: generate-env ### create a new migration file
 .PHONY: migrate-file
 
 proto:
-	protoc --go_out=. \
-  		--go-grpc_out=. \
+	protoc --go_out=genprotos \
+  		--go-grpc_out=genprotos \
   		--proto_path=protos \
-  		product.proto
+  		event.proto
 
 
 give-permissions:

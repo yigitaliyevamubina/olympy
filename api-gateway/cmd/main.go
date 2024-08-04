@@ -2,13 +2,14 @@ package main
 
 import (
 	"log"
+	"olympy/api-gateway/api"
+	"olympy/api-gateway/config"
+	genprotos "olympy/api-gateway/genprotos"
 	"os"
 
-	"github.com/ruziba3vich/armiya-gateway/api"
-	authhandlers "github.com/ruziba3vich/armiya-gateway/api/handlers/auth_handlers"
-	producthandlers "github.com/ruziba3vich/armiya-gateway/api/handlers/product_handlers"
-	"github.com/ruziba3vich/armiya-gateway/config"
-	"github.com/ruziba3vich/armiya-gateway/genprotos"
+	authhandlers "olympy/api-gateway/api/handlers/auth-handlers"
+	eventhandlers "olympy/api-gateway/api/handlers/event-handlers"
+
 	"google.golang.org/grpc"
 )
 
@@ -24,7 +25,7 @@ func main() {
 		logger.Fatalf("Failed to connect to auth service: %v", err)
 	}
 
-	connProduct, err := grpc.Dial(cfg.ProductHost, grpc.WithInsecure())
+	connProduct, err := grpc.Dial(cfg.EventHost, grpc.WithInsecure())
 	if err != nil {
 		logger.Fatalf("Failed to connect to product service: %v", err)
 	}
@@ -33,10 +34,10 @@ func main() {
 
 	authHandlers := authhandlers.NewAuthHandlers(authClient, logger)
 
-	productClient := genprotos.NewProductServiceClient(connProduct)
+	eventClient := genprotos.NewEventServiceClient(connProduct)
 
-	productHandlers := producthandlers.NewProductHandlers(productClient, logger)
+	eventHandlers := eventhandlers.NewEventHandlers(eventClient, logger)
 
-	api := api.New(&cfg, logger, authHandlers, productHandlers)
+	api := api.New(&cfg, logger, authHandlers, eventHandlers)
 	logger.Fatal(api.RUN())
 }
