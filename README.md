@@ -25,7 +25,7 @@ To get started with the API, follow these steps:
 ### Clone the Repository:
 
 ```bash
-git clone <https://github.com/your-repo/olympic-management-api.git>
+git clone <git@github.com:yigitaliyevamubina/olympy.git>
 
 ```
 
