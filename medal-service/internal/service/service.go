@@ -47,3 +47,8 @@ func (s *MedalService) ListMedals(ctx context.Context, req *modelservice.ListReq
 	s.logger.Println("List Medals Request")
 	return s.medalStorage.GetAllMedals(ctx, req)
 }
+
+func (s *MedalService) GetMedalRanking(ctx context.Context, req *modelservice.Empty) (*modelservice.MedalRankingResponse, error) {
+	s.logger.Println("Get Medal Ranking Request")
+	return s.medalStorage.GetMedalRanking(ctx, req)
+}

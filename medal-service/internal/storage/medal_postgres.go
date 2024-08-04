@@ -8,8 +8,9 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
-	
+
 	medalproto "olympy/medal-service/genproto/medal_service"
+
 	"github.com/google/uuid"
 )
 
@@ -173,4 +174,48 @@ func (m *Medal) GetAllMedals(ctx context.Context, req *medalproto.ListRequest) (
 		Count:  total,
 		Medals: medals,
 	}, nil
+}
+
+func (m *Medal) GetMedalRanking(ctx context.Context, req *medalproto.Empty) (*medalproto.MedalRankingResponse, error) {
+	query := `
+		SELECT 
+			c.id AS country_id, 
+			c.name AS country_name,
+			COUNT(CASE WHEN m.type = 'Gold' THEN 1 END) AS gold,
+			COUNT(CASE WHEN m.type = 'Silver' THEN 1 END) AS silver,
+			COUNT(CASE WHEN m.type = 'Bronze' THEN 1 END) AS bronze,
+			RANK() OVER (ORDER BY 
+				COUNT(CASE WHEN m.type = 'Gold' THEN 1 END) DESC, 
+				COUNT(CASE WHEN m.type = 'Silver' THEN 1 END) DESC, 
+				COUNT(CASE WHEN m.type = 'Bronze' THEN 1 END) DESC
+			) AS ranking
+		FROM countries c
+		LEFT JOIN medals m ON c.id = m.country_id
+		GROUP BY c.id, c.name
+		ORDER BY ranking
+	`
+
+	rows, err := m.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %v", err)
+	}
+	defer rows.Close()
+
+	var response medalproto.MedalRankingResponse
+	for rows.Next() {
+		var countryMedalCount medalproto.CountryMedalCount
+		if err := rows.Scan(
+			&countryMedalCount.CountryId,
+			&countryMedalCount.CountryName,
+			&countryMedalCount.Gold,
+			&countryMedalCount.Silver,
+			&countryMedalCount.Bronze,
+			&countryMedalCount.Ranking,
+		); err != nil {
+			return nil, fmt.Errorf("failed to scan row: %v", err)
+		}
+		response.CountryMedalCounts = append(response.CountryMedalCounts, &countryMedalCount)
+	}
+
+	return &response, nil
 }

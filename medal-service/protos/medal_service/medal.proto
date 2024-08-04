@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package medal6_service;
+package medal_service;
 
 service MedalService {
     rpc AddMedal(Medal) returns (Medal);
@@ -8,6 +8,7 @@ service MedalService {
     rpc DeleteMedal(GetSingleRequest) returns (Message);
     rpc ListMedals(ListRequest) returns (ListResponse);
     rpc GetMedal(GetSingleRequest) returns (Medal);
+    rpc GetMedalRanking(Empty) returns (MedalRankingResponse);
 }
 
 message Medal {
@@ -39,4 +40,19 @@ message ListResponse {
 
 message Message {
     string message = 1;
+}
+
+message Empty {}
+
+message CountryMedalCount {
+    int64 country_id = 1;
+    string country_name = 2;
+    int32 gold = 3;
+    int32 silver = 4;
+    int32 bronze = 5;
+    int32 ranking = 6; 
+}
+
+message MedalRankingResponse {
+    repeated CountryMedalCount country_medal_counts = 1;
 }
