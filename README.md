@@ -82,6 +82,9 @@ Manage Olympic events with the following endpoints:
 - **Get All Events:** `POST /api/v1/events/getall`
 - **Search Events:** `POST /api/v1/events/search`
 
+## Caching
+`The events data is cached using Redis for improved performance. When an event is created, edited, or deleted, the corresponding cache entries are invalidated to ensure data consistency.`
+
 ## Countries
 
 Manage countries with the following endpoints:
