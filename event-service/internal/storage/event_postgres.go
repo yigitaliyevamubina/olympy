@@ -3,17 +3,22 @@ package storage
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"time"
+
 	genprotos "olympy/event-service/genproto/event_service"
 	"olympy/event-service/internal/config"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 )
 
 type Event struct {
 	db           *sql.DB
 	queryBuilder squirrel.StatementBuilderType
+	redisClient  *redis.Client
 }
 
 func NewEventService(config *config.Config) (*Event, error) {
@@ -22,9 +27,16 @@ func NewEventService(config *config.Config) (*Event, error) {
 		return nil, fmt.Errorf("failed to connect to DB: %v", err)
 	}
 
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     config.Redis.Addr,
+		Password: config.Redis.Password,
+		DB:       config.Redis.DB,
+	})
+
 	return &Event{
 		db:           db,
 		queryBuilder: squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
+		redisClient:  redisClient,
 	}, nil
 }
 
@@ -79,6 +91,9 @@ func (e *Event) EditEvent(ctx context.Context, req *genprotos.EditEventRequest) 
 		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
 	}
 
+	// Invalidate cache for this event
+	e.redisClient.Del(ctx, req.Event.Id)
+
 	return &genprotos.EditEventResponse{
 		Event: &genprotos.Event{
 			Id:        req.Event.Id,
@@ -112,18 +127,37 @@ func (e *Event) DeleteEvent(ctx context.Context, req *genprotos.DeleteEventReque
 		return nil, fmt.Errorf("event with ID %s not found", req.Id)
 	}
 
+	// Invalidate cache for this event
+	e.redisClient.Del(ctx, req.Id)
+
 	return &genprotos.Message{Message: fmt.Sprintf("Event with ID %s deleted successfully", req.Id)}, nil
 }
 
 func (e *Event) GetEvent(ctx context.Context, req *genprotos.GetEventRequest) (*genprotos.GetEventResponse, error) {
-	var event genprotos.GetEventResponse
-	err := e.db.QueryRowContext(ctx, "SELECT id, name, sport_type, start_time, end_time FROM events WHERE id = $1", req.Id).
-		Scan(&event.Event.Id, &event.Event.Name, &event.Event.SportType, &event.Event.StartTime, &event.Event.EndTime)
+	// Check cache first
+	cachedEvent, err := e.redisClient.Get(ctx, req.Id).Result()
+	if err == nil {
+		var event genprotos.Event
+		if err := json.Unmarshal([]byte(cachedEvent), &event); err == nil {
+			return &genprotos.GetEventResponse{Event: &event}, nil
+		}
+	}
+
+	var event genprotos.Event
+	err = e.db.QueryRowContext(ctx, "SELECT id, name, sport_type, start_time, end_time FROM events WHERE id = $1", req.Id).
+		Scan(&event.Id, &event.Name, &event.SportType, &event.StartTime, &event.EndTime)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch event: %v", err)
 	}
 
-	return &event, nil
+	// Cache the result
+	eventJSON, err := json.Marshal(event)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal event: %v", err)
+	}
+	e.redisClient.Set(ctx, req.Id, eventJSON, 10*time.Minute)
+
+	return &genprotos.GetEventResponse{Event: &event}, nil
 }
 
 func (e *Event) GetAllEvents(ctx context.Context, req *genprotos.GetAllEventsRequest) (*genprotos.GetAllEventsResponse, error) {
@@ -131,6 +165,16 @@ func (e *Event) GetAllEvents(ctx context.Context, req *genprotos.GetAllEventsReq
 	page := req.Page
 	pageSize := req.PageSize
 	offset := (page - 1) * pageSize
+
+	// Check cache first
+	cacheKey := fmt.Sprintf("events_page_%d_size_%d", page, pageSize)
+	cachedEvents, err := e.redisClient.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var eventsResponse genprotos.GetAllEventsResponse
+		if err := json.Unmarshal([]byte(cachedEvents), &eventsResponse); err == nil {
+			return &eventsResponse, nil
+		}
+	}
 
 	// Get all events with pagination
 	query := "SELECT id, name, sport_type, start_time, end_time FROM events LIMIT $1 OFFSET $2"
@@ -160,51 +204,17 @@ func (e *Event) GetAllEvents(ctx context.Context, req *genprotos.GetAllEventsReq
 		return nil, fmt.Errorf("failed to count events: %v", err)
 	}
 
-	return &genprotos.GetAllEventsResponse{
+	eventsResponse := &genprotos.GetAllEventsResponse{
 		Events:     events,
 		TotalCount: totalCount,
-	}, nil
-}
+	}
 
-func (e *Event) SearchEvents(ctx context.Context, req *genprotos.SearchEventsRequest) (*genprotos.GetAllEventsResponse, error) {
-	query, args, err := e.queryBuilder.Select("id", "name", "sport_type", "start_time", "end_time").
-		From("events").
-		Where(squirrel.Like{"name": fmt.Sprintf("%%%s%%", req.Query)}).
-		Limit(uint64(req.PageSize)).
-		Offset(uint64((req.Page - 1) * req.PageSize)).
-		ToSql()
+	// Cache the result
+	eventsJSON, err := json.Marshal(eventsResponse)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build SQL query: %v", err)
+		return nil, fmt.Errorf("failed to marshal events response: %v", err)
 	}
+	e.redisClient.Set(ctx, cacheKey, eventsJSON, 10*time.Minute)
 
-	rows, err := e.db.QueryContext(ctx, query, args...)
-	if err != nil {
-		return nil, fmt.Errorf("failed to search events: %v", err)
-	}
-	defer rows.Close()
-
-	var events []*genprotos.Event
-	for rows.Next() {
-		var event genprotos.Event
-		if err := rows.Scan(&event.Id, &event.Name, &event.SportType, &event.StartTime, &event.EndTime); err != nil {
-			return nil, fmt.Errorf("failed to scan row: %v", err)
-		}
-		events = append(events, &event)
-	}
-
-	countQuery, args, err := e.queryBuilder.Select("COUNT(*)").
-		From("events").
-		Where(squirrel.Like{"name": fmt.Sprintf("%%%s%%", req.Query)}).
-		ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build count query: %v", err)
-	}
-
-	var total int32
-	err = e.db.QueryRowContext(ctx, countQuery, args...).Scan(&total)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch total count: %v", err)
-	}
-
-	return &genprotos.GetAllEventsResponse{Events: events, TotalCount: total}, nil
+	return eventsResponse, nil
 }
