@@ -1,4 +1,994 @@
+definitions:
+  olympy_api-gateway_genproto_athlete_service.Athlete:
+    properties:
+      country_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      sport_type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_athlete_service.ListRequest:
+    properties:
+      country_id:
+        type: integer
+      limit:
+        type: integer
+      page:
+        type: integer
+      sport_type:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_athlete_service.ListResponse:
+    properties:
+      athletes:
+        items:
+          $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete'
+        type: array
+      count:
+        type: integer
+    type: object
+  olympy_api-gateway_genproto_athlete_service.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_auth_service.LoginUserRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_auth_service.LoginUserResponse:
+    properties:
+      access_token:
+        type: string
+      message:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.User'
+    type: object
+  olympy_api-gateway_genproto_auth_service.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_auth_service.RefreshTokenResponse:
+    properties:
+      access_token:
+        type: string
+      message:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_auth_service.RegisterUserRequest:
+    properties:
+      password:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_auth_service.RegisterUserResponse:
+    properties:
+      message:
+        type: string
+      user:
+        $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.User'
+    type: object
+  olympy_api-gateway_genproto_auth_service.User:
+    properties:
+      id:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_country_service.Country:
+    properties:
+      created_at:
+        type: string
+      flag:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_country_service.ListRequest:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+    type: object
+  olympy_api-gateway_genproto_country_service.ListResponse:
+    properties:
+      count:
+        type: integer
+      countries:
+        items:
+          $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Country'
+        type: array
+    type: object
+  olympy_api-gateway_genproto_country_service.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_event_service.AddEventRequest:
+    properties:
+      event:
+        $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Event'
+    type: object
+  olympy_api-gateway_genproto_event_service.AddEventResponse:
+    properties:
+      event:
+        $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Event'
+    type: object
+  olympy_api-gateway_genproto_event_service.EditEventRequest:
+    properties:
+      event:
+        $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Event'
+    type: object
+  olympy_api-gateway_genproto_event_service.EditEventResponse:
+    properties:
+      event:
+        $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Event'
+    type: object
+  olympy_api-gateway_genproto_event_service.Event:
+    properties:
+      end_time:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      sport_type:
+        type: string
+      start_time:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_event_service.GetAllEventsRequest:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+    type: object
+  olympy_api-gateway_genproto_event_service.GetAllEventsResponse:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Event'
+        type: array
+      total_count:
+        type: integer
+    type: object
+  olympy_api-gateway_genproto_event_service.GetEventResponse:
+    properties:
+      event:
+        $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Event'
+    type: object
+  olympy_api-gateway_genproto_event_service.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_event_service.SearchEventsRequest:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      query:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_medal_service.CountryMedalCount:
+    properties:
+      bronze:
+        type: integer
+      country_id:
+        type: integer
+      country_name:
+        type: string
+      gold:
+        type: integer
+      ranking:
+        type: integer
+      silver:
+        type: integer
+    type: object
+  olympy_api-gateway_genproto_medal_service.ListRequest:
+    properties:
+      athlete_id:
+        type: string
+      country:
+        type: integer
+      event_id:
+        type: integer
+      limit:
+        type: integer
+      page:
+        type: integer
+    type: object
+  olympy_api-gateway_genproto_medal_service.ListResponse:
+    properties:
+      count:
+        type: integer
+      medals:
+        items:
+          $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Medal'
+        type: array
+    type: object
+  olympy_api-gateway_genproto_medal_service.Medal:
+    properties:
+      athlete_id:
+        type: string
+      country_id:
+        type: integer
+      created_at:
+        type: string
+      event_id:
+        type: integer
+      id:
+        type: integer
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_medal_service.MedalRankingResponse:
+    properties:
+      country_medal_counts:
+        items:
+          $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.CountryMedalCount'
+        type: array
+    type: object
+  olympy_api-gateway_genproto_medal_service.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_stream_service.StreamEventRequest:
+    properties:
+      event_id:
+        type: string
+      text:
+        type: string
+    type: object
+  olympy_api-gateway_genproto_stream_service.StreamEventResponse:
+    properties:
+      message:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+  description: TEST
+  title: API
+  version: "1.0"
+paths:
+  /athletes/add:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint adds a new athlete.
+      parameters:
+      - description: Athlete details to add
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+      summary: Add an athlete
+  /athletes/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint deletes an athlete by its ID.
+      parameters:
+      - description: Athlete ID to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+      summary: Delete an athlete
+  /athletes/edit:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint edits an existing athlete.
+      parameters:
+      - description: Athlete details to edit
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+      summary: Edit an athlete
+  /athletes/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves an athlete by its ID.
+      parameters:
+      - description: Athlete ID to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+      summary: Get an athlete
+  /athletes/getall:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint retrieves all athletes with pagination and optional
+        filters.
+      parameters:
+      - description: Pagination and filter parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.ListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.ListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
+      summary: List athletes
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint for logging in user.
+      parameters:
+      - description: User login details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.LoginUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Login user
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint for refreshing access token using refresh token.
+      parameters:
+      - description: Refresh token details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.RefreshTokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Refresh access token
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint for registering user.
+      parameters:
+      - description: User details to register
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_auth_service.RegisterUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Register user
+  /countries/add:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint adds a new country.
+      parameters:
+      - description: Country details to add
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Country'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Country'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+      summary: Add a country
+  /countries/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint deletes a country by its ID.
+      parameters:
+      - description: Country ID to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+      summary: Delete a country
+  /countries/edit:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint edits an existing country.
+      parameters:
+      - description: Country details to edit
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Country'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Country'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+      summary: Edit a country
+  /countries/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves a country by its ID.
+      parameters:
+      - description: Country ID to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Country'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+      summary: Get a country
+  /countries/getall:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint retrieves all countries with pagination.
+      parameters:
+      - description: Pagination parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_country_service.ListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.ListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
+      summary: List countries
+  /events/add:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint adds a new event.
+      parameters:
+      - description: Event details to add
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.AddEventRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.AddEventResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+      summary: Add an event
+  /events/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint deletes an event by its ID.
+      parameters:
+      - description: Event ID to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+      summary: Delete an event
+  /events/edit:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint edits an existing event.
+      parameters:
+      - description: Event details to edit
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.EditEventRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.EditEventResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+      summary: Edit an event
+  /events/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves an event by its ID.
+      parameters:
+      - description: Event ID to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.GetEventResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+      summary: Get an event
+  /events/getall:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint retrieves all events with pagination.
+      parameters:
+      - description: Pagination parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+      summary: Get all events
+  /events/search:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint searches events by query with pagination.
+      parameters:
+      - description: Search parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.SearchEventsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
+      summary: Search events
+  /medals/add:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint adds a new medal.
+      parameters:
+      - description: Medal details to add
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Medal'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Medal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+      summary: Add a medal
+  /medals/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint deletes a medal by its ID.
+      parameters:
+      - description: Medal ID to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+      summary: Delete a medal
+  /medals/edit:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint edits an existing medal.
+      parameters:
+      - description: Medal details to edit
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Medal'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Medal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+      summary: Edit a medal
+  /medals/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves a medal by its ID.
+      parameters:
+      - description: Medal ID to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Medal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+      summary: Get a medal
+  /medals/getall:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint retrieves all medals with pagination and optional
+        filters.
+      parameters:
+      - description: Pagination and filter parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.ListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.ListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+      summary: List medals
+  /medals/ranking:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves the ranking of countries based on medals.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.MedalRankingResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
+      summary: Get medal rankings
+  /stream/send:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint sends an event to the streaming service.
+      parameters:
+      - description: Event details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Send an event to the streaming service
 swagger: "2.0"

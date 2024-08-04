@@ -14,17 +14,1534 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/athletes/add": {
+            "post": {
+                "description": "This endpoint adds a new athlete.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add an athlete",
+                "parameters": [
+                    {
+                        "description": "Athlete details to add",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/athletes/delete/{id}": {
+            "delete": {
+                "description": "This endpoint deletes an athlete by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete an athlete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Athlete ID to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/athletes/edit": {
+            "post": {
+                "description": "This endpoint edits an existing athlete.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Edit an athlete",
+                "parameters": [
+                    {
+                        "description": "Athlete details to edit",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/athletes/get/{id}": {
+            "get": {
+                "description": "This endpoint retrieves an athlete by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get an athlete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Athlete ID to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/athletes/getall": {
+            "post": {
+                "description": "This endpoint retrieves all athletes with pagination and optional filters.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List athletes",
+                "parameters": [
+                    {
+                        "description": "Pagination and filter parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.ListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.ListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "This endpoint for logging in user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "User login details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.LoginUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.LoginUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "description": "This endpoint for refreshing access token using refresh token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Refresh access token",
+                "parameters": [
+                    {
+                        "description": "Refresh token details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.RefreshTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.RefreshTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "This endpoint for registering user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Register user",
+                "parameters": [
+                    {
+                        "description": "User details to register",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.RegisterUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.RegisterUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/add": {
+            "post": {
+                "description": "This endpoint adds a new country.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add a country",
+                "parameters": [
+                    {
+                        "description": "Country details to add",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Country"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Country"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/delete/{id}": {
+            "delete": {
+                "description": "This endpoint deletes a country by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a country",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Country ID to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/edit": {
+            "post": {
+                "description": "This endpoint edits an existing country.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Edit a country",
+                "parameters": [
+                    {
+                        "description": "Country details to edit",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Country"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Country"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/get/{id}": {
+            "get": {
+                "description": "This endpoint retrieves a country by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a country",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Country ID to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Country"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/countries/getall": {
+            "post": {
+                "description": "This endpoint retrieves all countries with pagination.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List countries",
+                "parameters": [
+                    {
+                        "description": "Pagination parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.ListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.ListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/add": {
+            "post": {
+                "description": "This endpoint adds a new event.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add an event",
+                "parameters": [
+                    {
+                        "description": "Event details to add",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.AddEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.AddEventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/delete/{id}": {
+            "delete": {
+                "description": "This endpoint deletes an event by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete an event",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/edit": {
+            "post": {
+                "description": "This endpoint edits an existing event.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Edit an event",
+                "parameters": [
+                    {
+                        "description": "Event details to edit",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.EditEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.EditEventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/get/{id}": {
+            "get": {
+                "description": "This endpoint retrieves an event by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get an event",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.GetEventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/getall": {
+            "post": {
+                "description": "This endpoint retrieves all events with pagination.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all events",
+                "parameters": [
+                    {
+                        "description": "Pagination parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/search": {
+            "post": {
+                "description": "This endpoint searches events by query with pagination.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Search events",
+                "parameters": [
+                    {
+                        "description": "Search parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.SearchEventsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/medals/add": {
+            "post": {
+                "description": "This endpoint adds a new medal.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add a medal",
+                "parameters": [
+                    {
+                        "description": "Medal details to add",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Medal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Medal"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/medals/delete/{id}": {
+            "delete": {
+                "description": "This endpoint deletes a medal by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a medal",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medal ID to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/medals/edit": {
+            "post": {
+                "description": "This endpoint edits an existing medal.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Edit a medal",
+                "parameters": [
+                    {
+                        "description": "Medal details to edit",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Medal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Medal"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/medals/get/{id}": {
+            "get": {
+                "description": "This endpoint retrieves a medal by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a medal",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medal ID to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Medal"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/medals/getall": {
+            "post": {
+                "description": "This endpoint retrieves all medals with pagination and optional filters.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List medals",
+                "parameters": [
+                    {
+                        "description": "Pagination and filter parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.ListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.ListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/medals/ranking": {
+            "get": {
+                "description": "This endpoint retrieves the ranking of countries based on medals.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get medal rankings",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.MedalRankingResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/stream/send": {
+            "post": {
+                "description": "This endpoint sends an event to the streaming service.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Send an event to the streaming service",
+                "parameters": [
+                    {
+                        "description": "Event details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "olympy_api-gateway_genproto_athlete_service.Athlete": {
+            "type": "object",
+            "properties": {
+                "country_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sport_type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_athlete_service.ListRequest": {
+            "type": "object",
+            "properties": {
+                "country_id": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "sport_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_athlete_service.ListResponse": {
+            "type": "object",
+            "properties": {
+                "athletes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.Athlete"
+                    }
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_athlete_service.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.LoginUserRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.LoginUserResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.User"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.RefreshTokenRequest": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.RefreshTokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.RegisterUserRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.RegisterUserResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_auth_service.User"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_auth_service.User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_country_service.Country": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "flag": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_country_service.ListRequest": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_country_service.ListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "countries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.Country"
+                    }
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_country_service.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.AddEventRequest": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Event"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.AddEventResponse": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Event"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.EditEventRequest": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Event"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.EditEventResponse": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Event"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.Event": {
+            "type": "object",
+            "properties": {
+                "end_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sport_type": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.GetAllEventsRequest": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.GetAllEventsResponse": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Event"
+                    }
+                },
+                "total_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.GetEventResponse": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.Event"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_event_service.SearchEventsRequest": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "query": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_medal_service.CountryMedalCount": {
+            "type": "object",
+            "properties": {
+                "bronze": {
+                    "type": "integer"
+                },
+                "country_id": {
+                    "type": "integer"
+                },
+                "country_name": {
+                    "type": "string"
+                },
+                "gold": {
+                    "type": "integer"
+                },
+                "ranking": {
+                    "type": "integer"
+                },
+                "silver": {
+                    "type": "integer"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_medal_service.ListRequest": {
+            "type": "object",
+            "properties": {
+                "athlete_id": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "integer"
+                },
+                "event_id": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_medal_service.ListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "medals": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Medal"
+                    }
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_medal_service.Medal": {
+            "type": "object",
+            "properties": {
+                "athlete_id": {
+                    "type": "string"
+                },
+                "country_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "event_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_medal_service.MedalRankingResponse": {
+            "type": "object",
+            "properties": {
+                "country_medal_counts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.CountryMedalCount"
+                    }
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_medal_service.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_stream_service.StreamEventRequest": {
+            "type": "object",
+            "properties": {
+                "event_id": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "olympy_api-gateway_genproto_stream_service.StreamEventResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "API",
+	Description:      "TEST",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

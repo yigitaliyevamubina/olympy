@@ -2,4 +2,4 @@ proto:
 	./scripts/gen-proto.sh
 	
 swag:
-	swag init -d cmd --output docs
+	swag init -g api/api.go --parseDependency

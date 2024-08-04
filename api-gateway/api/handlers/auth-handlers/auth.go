@@ -26,8 +26,8 @@ func NewAuthHandlers(client genprotos.AuthServiceClient, logger *log.Logger) *Au
 // @Produce json
 // @Param request body genprotos.RegisterUserRequest true "User details to register"
 // @Success 200 {object} genprotos.RegisterUserResponse
-// @Failure 400 {object} gin.H{"error": string}
-// @Failure 500 {object} gin.H{"error": string}
+// @Failure 400 {object} string
+// @Failure 500 {object} string
 // @Router /auth/register [post]
 func (a *AuthHandlers) Register(ctx *gin.Context) {
 	var req genprotos.RegisterUserRequest
@@ -53,8 +53,8 @@ func (a *AuthHandlers) Register(ctx *gin.Context) {
 // @Produce json
 // @Param request body genprotos.LoginUserRequest true "User login details"
 // @Success 200 {object} genprotos.LoginUserResponse
-// @Failure 400 {object} gin.H{"error": string}
-// @Failure 500 {object} gin.H{"error": string}
+// @Failure 400 {object} string
+// @Failure 500 {object} string
 // @Router /auth/login [post]
 func (a *AuthHandlers) Login(ctx *gin.Context) {
 	var req genprotos.LoginUserRequest
@@ -80,8 +80,8 @@ func (a *AuthHandlers) Login(ctx *gin.Context) {
 // @Produce json
 // @Param request body genprotos.RefreshTokenRequest true "Refresh token details"
 // @Success 200 {object} genprotos.RefreshTokenResponse
-// @Failure 400 {object} gin.H{"error": string}
-// @Failure 500 {object} gin.H{"error": string}
+// @Failure 400 {object} string
+// @Failure 500 {object} string
 // @Router /auth/refresh [post]
 func (a *AuthHandlers) RefreshToken(ctx *gin.Context) {
 	var req genprotos.RefreshTokenRequest
