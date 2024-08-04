@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"olympy/athlete-service/internal/config"
 
 	_ "github.com/lib/pq"
-	"armiya/equipment-service/internal/config"
 )
 
 func ConnectDB(config config.Config) (*sql.DB, error) {

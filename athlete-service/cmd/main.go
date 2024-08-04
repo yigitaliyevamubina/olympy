@@ -1,11 +1,11 @@
 package main
 
 import (
-	"armiya/equipment-service/api"
-	"armiya/equipment-service/internal/config"
-	"armiya/equipment-service/internal/service"
-	"armiya/equipment-service/internal/storage"
 	"log"
+	"olympy/athlete-service/api"
+	"olympy/athlete-service/internal/config"
+	"olympy/athlete-service/internal/service"
+	"olympy/athlete-service/internal/storage"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -22,12 +22,12 @@ func main() {
 
 	migrateDB()
 
-	storage, err := storage.New(configs)
+	athletestorage, err := storage.NewAthleteService(configs)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	api := api.New(service.New(*storage))
+	api := api.New(service.NewAthleteService(*athletestorage))
 
 	log.Fatal(api.RUN(configs))
 }
