@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -14,11 +15,13 @@ type (
 		AthleteHost   string
 		AiService     string
 		ServerAddress string
+		StreamHost    string
 	}
 )
 
 func (c *Config) Load() error {
 	if err := godotenv.Load(); err != nil {
+		fmt.Println("AAAAAAAAAAAAAAAAAAAAAA", err)
 		return err
 	}
 	c.AuthHost = os.Getenv("AUTH_HOST")
@@ -26,6 +29,7 @@ func (c *Config) Load() error {
 	c.MedalHost = os.Getenv("MEDAL_HOST")
 	c.AthleteHost = os.Getenv("ATHLETE_HOST")
 	c.AiService = os.Getenv("AI_SERVICE")
+	c.StreamHost = ":8777"
 	c.ServerAddress = os.Getenv("SERVER_ADDRESS")
 	return nil
 }

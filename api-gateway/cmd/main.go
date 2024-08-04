@@ -1,6 +1,7 @@
 package main
 
 import (
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"olympy/api-gateway/api"
 	"olympy/api-gateway/config"
@@ -9,6 +10,7 @@ import (
 	countryservice "olympy/api-gateway/genproto/country_service"
 	eventservice "olympy/api-gateway/genproto/event_service"
 	medalservice "olympy/api-gateway/genproto/medal_service"
+	streamservice "olympy/api-gateway/genproto/stream_service"
 	"os"
 
 	athletehandlers "olympy/api-gateway/api/handlers/athlete-handlers"
@@ -16,44 +18,55 @@ import (
 	countryhandlers "olympy/api-gateway/api/handlers/country-handlers"
 	eventhandlers "olympy/api-gateway/api/handlers/event-handlers"
 	medalhandlers "olympy/api-gateway/api/handlers/medal-handlers"
+	streamhandlers "olympy/api-gateway/api/handlers/stream-handlers"
 
 	"google.golang.org/grpc"
 )
 
 func main() {
-	var cfg config.Config
+	cfg, err := config.New()
+	if err != nil {
+		log.Fatalf("failed to load config: %v", err)
+	}
 	logger := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	if err := cfg.Load(); err != nil {
 		logger.Fatal(err)
 	}
 
 	// Connect to auth service
-	connAuth, err := grpc.NewClient(cfg.AuthHost, grpc.WithInsecure())
+	connAuth, err := grpc.Dial(cfg.AuthHost, grpc.WithInsecure())
 	if err != nil {
 		logger.Fatalf("Failed to connect to auth service: %v", err)
 	}
-	defer connAuth.Close() // Ensuring connection is closed
+	defer connAuth.Close()
 
 	// Connect to event service
-	connEvent, err := grpc.NewClient(cfg.EventHost, grpc.WithInsecure())
+	connEvent, err := grpc.Dial(cfg.EventHost, grpc.WithInsecure())
 	if err != nil {
 		logger.Fatalf("Failed to connect to event service: %v", err)
 	}
-	defer connEvent.Close() // Ensuring connection is closed
+	defer connEvent.Close()
 
 	// Connect to medal service
-	connMedal, err := grpc.NewClient(cfg.MedalHost, grpc.WithInsecure())
+	connMedal, err := grpc.Dial(cfg.MedalHost, grpc.WithInsecure())
 	if err != nil {
 		logger.Fatalf("Failed to connect to medal service: %v", err)
 	}
-	defer connMedal.Close() // Ensuring connection is closed
+	defer connMedal.Close()
 
 	// Connect to athlete service
-	connAthlete, err := grpc.NewClient(cfg.AthleteHost, grpc.WithInsecure())
+	connAthlete, err := grpc.Dial(cfg.AthleteHost, grpc.WithInsecure())
 	if err != nil {
 		logger.Fatalf("Failed to connect to athlete service: %v", err)
 	}
-	defer connAthlete.Close() // Ensuring connection is closed
+	defer connAthlete.Close()
+
+	// Connect to stream service
+	connStream, err := grpc.Dial(cfg.StreamHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatalf("Failed to connect to stream service: %v", err)
+	}
+	defer connStream.Close()
 
 	// Creating clients for services
 	authClient := authservice.NewAuthServiceClient(connAuth)
@@ -61,6 +74,7 @@ func main() {
 	countryClient := countryservice.NewCountryServiceClient(connMedal)
 	medalClient := medalservice.NewMedalServiceClient(connMedal)
 	athleteClient := athleteservice.NewAthleteServiceClient(connAthlete)
+	streamClient := streamservice.NewStreamingServiceClient(connStream)
 
 	// Creating handler instances
 	authHandlers := authhandlers.NewAuthHandlers(authClient, logger)
@@ -68,8 +82,9 @@ func main() {
 	countryHandlers := countryhandlers.NewCountryHandlers(countryClient, logger)
 	medalHandlers := medalhandlers.NewMedalHandlers(medalClient, logger)
 	athleteHandlers := athletehandlers.NewAthleteHandlers(athleteClient, logger)
+	streamHandlers := streamhandlers.NewStreamHandlers(streamClient, logger)
 
 	// Creating API instance
-	api := api.New(&cfg, logger, authHandlers, eventHandlers, countryHandlers, medalHandlers, athleteHandlers)
+	api := api.New(cfg, logger, authHandlers, eventHandlers, countryHandlers, medalHandlers, athleteHandlers, streamHandlers)
 	logger.Fatal(api.RUN())
 }

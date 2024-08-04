@@ -15,6 +15,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/stream/send": {
+            "post": {
+                "description": "This endpoint sends an event to the streaming service.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Send an event to the streaming service",
+                "parameters": [
+                    {
+                        "description": "Event details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/athletes/add": {
             "post": {
                 "description": "This endpoint adds a new athlete.",
@@ -1052,49 +1095,6 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.Message"
-                        }
-                    }
-                }
-            }
-        },
-        "/stream/send": {
-            "post": {
-                "description": "This endpoint sends an event to the streaming service.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Send an event to the streaming service",
-                "parameters": [
-                    {
-                        "description": "Event details",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }

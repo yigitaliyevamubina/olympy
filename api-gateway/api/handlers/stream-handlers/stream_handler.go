@@ -3,6 +3,7 @@ package streamhandlers
 import (
 	"log"
 	"net/http"
+
 	streamingservice "olympy/api-gateway/genproto/stream_service"
 
 	"github.com/gin-gonic/gin"
@@ -27,8 +28,8 @@ func NewStreamHandlers(client streamingservice.StreamingServiceClient, logger *l
 // @Produce json
 // @Param request body streamingservice.StreamEventRequest true "Event details"
 // @Success 200 {object} streamingservice.StreamEventResponse
-// @Failure 400 {object} string
-// @Failure 500 {object} string
+// @Failure 400 {object} streamingservice.Message
+// @Failure 500 {object} streamingservice.Message
 // @Router /stream/send [post]
 func (s *StreamHandlers) SendEvent(ctx *gin.Context) {
 	var req streamingservice.StreamEventRequest

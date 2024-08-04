@@ -280,6 +280,34 @@ info:
   title: API
   version: "1.0"
 paths:
+  /api/v1/stream/send:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint sends an event to the streaming service.
+      parameters:
+      - description: Event details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Send an event to the streaming service
   /athletes/add:
     post:
       consumes:
@@ -963,32 +991,4 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: Get medal rankings
-  /stream/send:
-    post:
-      consumes:
-      - application/json
-      description: This endpoint sends an event to the streaming service.
-      parameters:
-      - description: Event details
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Send an event to the streaming service
 swagger: "2.0"

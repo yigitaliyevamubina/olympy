@@ -8,6 +8,7 @@ import (
 	countryhandlers "olympy/api-gateway/api/handlers/country-handlers" // Import path for CountryHandlers
 	eventhandlers "olympy/api-gateway/api/handlers/event-handlers"     // Updated import path
 	medalhandlers "olympy/api-gateway/api/handlers/medal-handlers"     // Import path for MedalHandlers
+	streamhandlers "olympy/api-gateway/api/handlers/stream-handlers"
 	"olympy/api-gateway/config"
 	_ "olympy/api-gateway/docs"
 
@@ -24,6 +25,7 @@ type API struct {
 	countryhandler *countryhandlers.CountryHandlers
 	medalhandler   *medalhandlers.MedalHandlers
 	athletehandler *athletehandlers.AthleteHandlers
+	streamhandlers *streamhandlers.StreamHandlers
 }
 
 func New(
@@ -33,7 +35,9 @@ func New(
 	eventhandler *eventhandlers.EventHandlers,
 	countryhandler *countryhandlers.CountryHandlers,
 	medalhandler *medalhandlers.MedalHandlers,
-	athletehandler *athletehandlers.AthleteHandlers) *API {
+	athletehandler *athletehandlers.AthleteHandlers,
+	streamhandler *streamhandlers.StreamHandlers,
+) *API {
 	return &API{
 		logger:         logger,
 		cfg:            cfg,
@@ -84,6 +88,7 @@ func (a *API) RUN() error {
 		api.DELETE("/athletes/delete/:id", a.athletehandler.DeleteAthlete) // Delete athlete by ID
 		api.GET("/athletes/get/:id", a.athletehandler.GetAthlete)          // Get athlete by ID
 		api.POST("/athletes/getall", a.athletehandler.ListAthletes)        // List athletes
+		api.POST("/stream/send", a.streamhandlers.SendEvent)               // Send
 	}
 
 	return router.Run(a.cfg.ServerAddress)
