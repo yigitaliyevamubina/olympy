@@ -48,8 +48,6 @@ func New(
 // @title API
 // @version 1.0
 // @description TEST
-// @host localhost:9090
-// @BasePath /api/v1
 func (a *API) RUN() error {
 	router := gin.Default()
 
