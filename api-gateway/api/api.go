@@ -3,6 +3,7 @@ package api
 import (
 	"log"
 
+	athletehandlers "olympy/api-gateway/api/handlers/athlete-handlers" // Import path for AthleteHandlers
 	authhandler "olympy/api-gateway/api/handlers/auth-handlers"        // Updated import path
 	countryhandlers "olympy/api-gateway/api/handlers/country-handlers" // Import path for CountryHandlers
 	eventhandlers "olympy/api-gateway/api/handlers/event-handlers"     // Updated import path
@@ -22,6 +23,7 @@ type API struct {
 	eventhandler   *eventhandlers.EventHandlers
 	countryhandler *countryhandlers.CountryHandlers
 	medalhandler   *medalhandlers.MedalHandlers
+	athletehandler *athletehandlers.AthleteHandlers
 }
 
 func New(
@@ -30,7 +32,8 @@ func New(
 	authhandler *authhandler.AuthHandlers,
 	eventhandler *eventhandlers.EventHandlers,
 	countryhandler *countryhandlers.CountryHandlers,
-	medalhandler *medalhandlers.MedalHandlers) *API {
+	medalhandler *medalhandlers.MedalHandlers,
+	athletehandler *athletehandlers.AthleteHandlers) *API {
 	return &API{
 		logger:         logger,
 		cfg:            cfg,
@@ -38,6 +41,7 @@ func New(
 		eventhandler:   eventhandler,
 		countryhandler: countryhandler,
 		medalhandler:   medalhandler,
+		athletehandler: athletehandler,
 	}
 }
 
@@ -75,7 +79,13 @@ func (a *API) RUN() error {
 		api.DELETE("/medals/delete/:id", a.medalhandler.DeleteMedal) // Delete medal by ID
 		api.GET("/medals/get/:id", a.medalhandler.GetMedal)          // Get medal by ID
 		api.POST("/medals/getall", a.medalhandler.ListMedals)        // List medals
-		api.GET("/medals/ranking", a.medalhandler.GetMedalRanking)  // Get country rankings sorted by the number of medals
+		api.GET("/medals/ranking", a.medalhandler.GetMedalRanking)   // Get country rankings sorted by the number of medals
+
+		api.POST("/athletes/add", a.athletehandler.AddAthlete)             // Add athlete
+		api.POST("/athletes/edit", a.athletehandler.EditAthlete)           // Edit athlete
+		api.DELETE("/athletes/delete/:id", a.athletehandler.DeleteAthlete) // Delete athlete by ID
+		api.GET("/athletes/get/:id", a.athletehandler.GetAthlete)          // Get athlete by ID
+		api.POST("/athletes/getall", a.athletehandler.ListAthletes)        // List athletes
 	}
 
 	return router.Run(a.cfg.ServerAddress)

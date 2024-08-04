@@ -92,6 +92,16 @@ Manage countries with the following endpoints:
 - **Get Country:** `GET /api/v1/countries/get/:id`
 - **List Countries:** `POST /api/v1/countries/getall`
 
+## Athletes
+
+Manage countries with the following endpoints:
+
+- **Add Athlete:** `POST /api/v1/athletes/add`
+- **Edit Athlete:** `POST /api/v1/athletes/edit`
+- **Delete Athlete:** `DELETE /api/v1/athletes/delete/:id`
+- **Get Athlete:** `GET /api/v1/athletes/get/:id`
+- **List Athletes:** `POST /api/v1/athletes/getall`
+
 ## Medals
 
 Manage medals with the following endpoints:
@@ -122,3 +132,11 @@ For detailed information about each endpoint, including request parameters and r
 Explore and interact with the API using Swagger UI:
 
 - **Swagger Documentation:** `http://localhost:9090/swagger/index.html`
+
+
+**AUTH_HOST=:2222**
+**EVENT_HOST=:4444**
+**MEDAL_HOST=:5555**
+**ATHLETE_HOST=:6666**
+**GATEWAY_HOST=:8080**
+**SERVER_ADDRESS=:9090**
