@@ -134,9 +134,9 @@ Explore and interact with the API using Swagger UI:
 - **Swagger Documentation:** `http://localhost:9090/swagger/index.html`
 
 
-**AUTH_HOST=:2222**
-**EVENT_HOST=:4444**
-**MEDAL_HOST=:5555**
-**ATHLETE_HOST=:6666**
-**GATEWAY_HOST=:8080**
-**SERVER_ADDRESS=:9090**
+`AUTH_HOST=:2222`
+`EVENT_HOST=:4444`
+`MEDAL_HOST=:5555`
+`ATHLETE_HOST=:6666`
+`GATEWAY_HOST=:8080`
+`SERVER_ADDRESS=:9090`
