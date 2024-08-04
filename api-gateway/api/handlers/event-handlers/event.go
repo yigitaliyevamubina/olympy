@@ -78,20 +78,17 @@ func (e *EventHandlers) EditEvent(ctx *gin.Context) {
 // @Description This endpoint deletes an event by its ID.
 // @Accept json
 // @Produce json
-// @Param request body eventservice.DeleteEventRequest true "Event ID to delete"
+// @Param id path string true "Event ID to delete"
 // @Success 200 {object} eventservice.Message
 // @Failure 400 {object} eventservice.Message
 // @Failure 500 {object} eventservice.Message
-// @Router /events/delete [post]
+// @Router /events/delete/{id} [delete]
 func (e *EventHandlers) DeleteEvent(ctx *gin.Context) {
-	var req eventservice.DeleteEventRequest
+	idStr := ctx.Param("id")
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
-		return
-	}
+	req := &eventservice.DeleteEventRequest{Id: idStr}
 
-	resp, err := e.client.DeleteEvent(ctx, &req)
+	resp, err := e.client.DeleteEvent(ctx, req)
 	if err != nil {
 		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
 		return
@@ -105,20 +102,17 @@ func (e *EventHandlers) DeleteEvent(ctx *gin.Context) {
 // @Description This endpoint retrieves an event by its ID.
 // @Accept json
 // @Produce json
-// @Param request body eventservice.GetEventRequest true "Event ID to retrieve"
+// @Param id path string true "Event ID to retrieve"
 // @Success 200 {object} eventservice.GetEventResponse
 // @Failure 400 {object} eventservice.Message
 // @Failure 500 {object} eventservice.Message
-// @Router /events/get [post]
+// @Router /events/get/{id} [get]
 func (e *EventHandlers) GetEvent(ctx *gin.Context) {
-	var req eventservice.GetEventRequest
+	idStr := ctx.Param("id")
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
-		return
-	}
+	req := &eventservice.GetEventRequest{Id: idStr}
 
-	resp, err := e.client.GetEvent(ctx, &req)
+	resp, err := e.client.GetEvent(ctx, req)
 	if err != nil {
 		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
 		return

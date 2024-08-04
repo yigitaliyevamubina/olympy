@@ -3,8 +3,10 @@ package api
 import (
 	"log"
 
-	authhandler "olympy/api-gateway/api/handlers/auth-handlers"    // Updated import path
-	eventhandlers "olympy/api-gateway/api/handlers/event-handlers" // Updated import path
+	authhandler "olympy/api-gateway/api/handlers/auth-handlers"        // Updated import path
+	countryhandlers "olympy/api-gateway/api/handlers/country-handlers" // Import path for CountryHandlers
+	eventhandlers "olympy/api-gateway/api/handlers/event-handlers"     // Updated import path
+	medalhandlers "olympy/api-gateway/api/handlers/medal-handlers"     // Import path for MedalHandlers
 	"olympy/api-gateway/config"
 	_ "olympy/api-gateway/docs"
 
@@ -14,22 +16,28 @@ import (
 )
 
 type API struct {
-	logger       *log.Logger
-	cfg          *config.Config
-	authhandler  *authhandler.AuthHandlers
-	eventhandler *eventhandlers.EventHandlers
+	logger         *log.Logger
+	cfg            *config.Config
+	authhandler    *authhandler.AuthHandlers
+	eventhandler   *eventhandlers.EventHandlers
+	countryhandler *countryhandlers.CountryHandlers
+	medalhandler   *medalhandlers.MedalHandlers
 }
 
 func New(
 	cfg *config.Config,
 	logger *log.Logger,
 	authhandler *authhandler.AuthHandlers,
-	eventhandler *eventhandlers.EventHandlers) *API {
+	eventhandler *eventhandlers.EventHandlers,
+	countryhandler *countryhandlers.CountryHandlers,
+	medalhandler *medalhandlers.MedalHandlers) *API {
 	return &API{
-		logger:       logger,
-		cfg:          cfg,
-		authhandler:  authhandler,
-		eventhandler: eventhandler,
+		logger:         logger,
+		cfg:            cfg,
+		authhandler:    authhandler,
+		eventhandler:   eventhandler,
+		countryhandler: countryhandler,
+		medalhandler:   medalhandler,
 	}
 }
 
@@ -49,12 +57,24 @@ func (a *API) RUN() error {
 		api.POST("/auth/login", a.authhandler.Login)          // Login user
 		api.POST("/auth/refresh", a.authhandler.RefreshToken) // Refresh access token
 
-		api.POST("/events/add", a.eventhandler.AddEvent)        // Add event
-		api.POST("/events/edit", a.eventhandler.EditEvent)      // Edit event
-		api.POST("/events/delete", a.eventhandler.DeleteEvent)  // Delete event
-		api.POST("/events/get", a.eventhandler.GetEvent)        // Get event
-		api.POST("/events/getall", a.eventhandler.GetAllEvents) // Get all events
-		api.POST("/events/search", a.eventhandler.SearchEvents) // Search events
+		api.POST("/events/add", a.eventhandler.AddEvent)             // Add event
+		api.POST("/events/edit", a.eventhandler.EditEvent)           // Edit event
+		api.DELETE("/events/delete/:id", a.eventhandler.DeleteEvent) // Delete event by ID
+		api.GET("/events/get/:id", a.eventhandler.GetEvent)          // Get event by ID
+		api.POST("/events/getall", a.eventhandler.GetAllEvents)      // Get all events
+		api.POST("/events/search", a.eventhandler.SearchEvents)      // Search events
+
+		api.POST("/countries/add", a.countryhandler.AddCountry)             // Add country
+		api.POST("/countries/edit", a.countryhandler.EditCountry)           // Edit country
+		api.DELETE("/countries/delete/:id", a.countryhandler.DeleteCountry) // Delete country by ID
+		api.GET("/countries/get/:id", a.countryhandler.GetCountry)          // Get country by ID
+		api.POST("/countries/getall", a.countryhandler.ListCountries)       // List countries
+
+		api.POST("/medals/add", a.medalhandler.AddMedal)             // Add medal
+		api.POST("/medals/edit", a.medalhandler.EditMedal)           // Edit medal
+		api.DELETE("/medals/delete/:id", a.medalhandler.DeleteMedal) // Delete medal by ID
+		api.GET("/medals/get/:id", a.medalhandler.GetMedal)          // Get medal by ID
+		api.POST("/medals/getall", a.medalhandler.ListMedals)        // List medals
 	}
 
 	return router.Run(a.cfg.ServerAddress)

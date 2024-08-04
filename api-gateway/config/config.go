@@ -10,6 +10,7 @@ type (
 	Config struct {
 		AuthHost      string
 		EventHost     string
+		MedalHost string
 		AiService     string
 		ServerAddress string
 	}
@@ -21,6 +22,7 @@ func (c *Config) Load() error {
 	}
 	c.AuthHost = os.Getenv("AUTH_HOST")
 	c.EventHost = os.Getenv("EVENT_HOST")
+	c.MedalHost = os.Getenv("MEDAL_HOST")
 	c.AiService = os.Getenv("AI_SERVICE")
 	c.ServerAddress = os.Getenv("SERVER_ADDRESS")
 	return nil
