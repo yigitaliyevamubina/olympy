@@ -26,10 +26,11 @@ func NewStreamHandlers(client streamingservice.StreamingServiceClient, logger *l
 // @Description This endpoint sends an event to the streaming service.
 // @Accept json
 // @Produce json
+// @Tags Live Streaming
 // @Param request body streamingservice.StreamEventRequest true "Event details"
 // @Success 200 {object} streamingservice.StreamEventResponse
-// @Failure 400 {object} streamingservice.Message
-// @Failure 500 {object} streamingservice.Message
+// @Failure 400 {object} streamingservice.StreamEventResponse
+// @Failure 500 {object} streamingservice.StreamEventResponse
 // @Router /stream/send [post]
 func (s *StreamHandlers) SendEvent(ctx *gin.Context) {
 	var req streamingservice.StreamEventRequest

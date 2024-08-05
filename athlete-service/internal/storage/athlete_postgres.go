@@ -10,7 +10,6 @@ import (
 	"olympy/athlete-service/internal/config"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/google/uuid"
 )
 
 type Athlete struct {
@@ -32,7 +31,6 @@ func NewAthleteService(config *config.Config) (*Athlete, error) {
 
 func (a *Athlete) AddAthlete(ctx context.Context, req *athleteservice.Athlete) (*athleteservice.Athlete, error) {
 	data := map[string]interface{}{
-		"id":         uuid.New().ID(),
 		"name":       req.Name,
 		"country_id": req.CountryId,
 		"sport_type": req.SportType,
@@ -42,17 +40,20 @@ func (a *Athlete) AddAthlete(ctx context.Context, req *athleteservice.Athlete) (
 
 	query, args, err := a.queryBuilder.Insert("athletes").
 		SetMap(data).
+		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build SQL query: %v", err)
 	}
 
-	if _, err := a.db.ExecContext(ctx, query, args...); err != nil {
-		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
+	var id int64
+
+	if err := a.db.QueryRowContext(ctx, query, args...).Scan(&id); err != nil {
+		return nil, fmt.Errorf("failed to scan row: %v", err)
 	}
 
 	return &athleteservice.Athlete{
-		Id:        data["id"].(int64),
+		Id:        id,
 		Name:      req.Name,
 		CountryId: req.CountryId,
 		SportType: req.SportType,

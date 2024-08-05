@@ -1,4 +1,4 @@
-DB_URL := "postgres://postgres:nodirbek@localhost:5432/ecodb?sslmode=disable"
+DB_URL := "postgres://postgres:mubina2007@localhost:5432/olympydb?sslmode=disable"
 
 run:
 	go run cmd/main.go
