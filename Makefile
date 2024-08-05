@@ -1,4 +1,4 @@
-DB_URL := "postgres://postgres:mubina2007@localhost:5432/olympydb?sslmode=disable"
+DB_URL := "postgres://postgres:1234@localhost:5544/olympydb?sslmode=disable"
 
 run:
 	go run cmd/main.go
