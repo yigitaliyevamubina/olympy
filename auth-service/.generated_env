@@ -1,1 +1,1 @@
-DB_URL=postgres://postgres:nodirbek@localhost:5432/users?sslmode=disable
+DB_URL=postgres://postgres:1234@localhost:5544/users?sslmode=disable
