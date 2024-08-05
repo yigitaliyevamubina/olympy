@@ -10,7 +10,7 @@ import (
 	"olympy/athlete-service/internal/config"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/google/uuid"
+	//"github.com/google/uuid"
 )
 
 type Athlete struct {
@@ -32,12 +32,11 @@ func NewAthleteService(config *config.Config) (*Athlete, error) {
 
 func (a *Athlete) AddAthlete(ctx context.Context, req *athleteservice.Athlete) (*athleteservice.Athlete, error) {
 	data := map[string]interface{}{
-		"id":         uuid.New().ID(),
+		"id":         req.Id,
 		"name":       req.Name,
 		"country_id": req.CountryId,
 		"sport_type": req.SportType,
 		"created_at": time.Now(),
-		"updated_at": time.Now(),
 	}
 
 	query, args, err := a.queryBuilder.Insert("athletes").
@@ -57,7 +56,6 @@ func (a *Athlete) AddAthlete(ctx context.Context, req *athleteservice.Athlete) (
 		CountryId: req.CountryId,
 		SportType: req.SportType,
 		CreatedAt: data["created_at"].(time.Time).String(),
-		UpdatedAt: data["updated_at"].(time.Time).String(),
 	}, nil
 }
 
