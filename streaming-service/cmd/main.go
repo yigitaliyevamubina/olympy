@@ -15,7 +15,7 @@ func main() {
 	mongoClient, err := storage.NewMongoClient("mongodb://localhost:27017")
 	fmt.Println("mongoooooooo")
 	if err != nil {
-		log.Fatalf("failed to connect to MongoDB: %v", err)``
+		log.Fatalf("failed to connect to MongoDB: %v", err)
 	}
 
 	// Start WebSocket server
