@@ -82,13 +82,13 @@ func (e *EventHandlers) EditEvent(ctx *gin.Context) {
 // @Tags Event
 // @Accept json
 // @Produce json
-// @Param id path string true "Event ID to delete"
+// @Param id query string true "Event ID to delete"
 // @Success 200 {object} eventservice.Message
 // @Failure 400 {object} eventservice.Message
 // @Failure 500 {object} eventservice.Message
-// @Router /events/delete/{id} [delete]
+// @Router /events/delete [delete]
 func (e *EventHandlers) DeleteEvent(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	req := &eventservice.DeleteEventRequest{Id: idStr}
 
@@ -107,13 +107,13 @@ func (e *EventHandlers) DeleteEvent(ctx *gin.Context) {
 // @Tags Event
 // @Accept json
 // @Produce json
-// @Param id path string true "Event ID to retrieve"
+// @Param id query string true "Event ID to retrieve"
 // @Success 200 {object} eventservice.GetEventResponse
 // @Failure 400 {object} eventservice.Message
 // @Failure 500 {object} eventservice.Message
-// @Router /events/get/{id} [get]
+// @Router /events/get [get]
 func (e *EventHandlers) GetEvent(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	req := &eventservice.GetEventRequest{Id: idStr}
 

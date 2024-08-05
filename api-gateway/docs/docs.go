@@ -61,7 +61,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/athletes/delete/{id}": {
+        "/athletes/delete": {
             "delete": {
                 "description": "This endpoint deletes an athlete by its ID.",
                 "consumes": [
@@ -79,7 +79,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Athlete ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -151,8 +151,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/athletes/get/{id}": {
+        "/athletes/get": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves an athlete by its ID.",
                 "consumes": [
                     "application/json"
@@ -167,9 +172,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Athlete ID to retrieve",
+                        "description": "Athlete ID to get",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -197,6 +202,11 @@ const docTemplate = `{
         },
         "/athletes/getall": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves all athletes with pagination and optional filters.",
                 "consumes": [
                     "application/json"
@@ -442,7 +452,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/countries/delete/{id}": {
+        "/countries/delete": {
             "delete": {
                 "description": "This endpoint deletes a country by its ID.",
                 "consumes": [
@@ -460,7 +470,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Country ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -532,8 +542,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/countries/get/{id}": {
+        "/countries/get": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves a country by its ID.",
                 "consumes": [
                     "application/json"
@@ -550,7 +565,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Country ID to retrieve",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -578,6 +593,11 @@ const docTemplate = `{
         },
         "/countries/getall": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves all countries with pagination.",
                 "consumes": [
                     "application/json"
@@ -673,7 +693,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/events/delete/{id}": {
+        "/events/delete": {
             "delete": {
                 "description": "This endpoint deletes an event by its ID.",
                 "consumes": [
@@ -691,7 +711,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Event ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -763,7 +783,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/events/get/{id}": {
+        "/events/get": {
             "get": {
                 "description": "This endpoint retrieves an event by its ID.",
                 "consumes": [
@@ -781,7 +801,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Event ID to retrieve",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -961,7 +981,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/medals/delete/{id}": {
+        "/medals/delete": {
             "delete": {
                 "description": "This endpoint deletes a medal by its ID.",
                 "consumes": [
@@ -979,7 +999,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Medal ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1051,7 +1071,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/medals/get/{id}": {
+        "/medals/get": {
             "get": {
                 "description": "This endpoint retrieves a medal by its ID.",
                 "consumes": [
@@ -1069,7 +1089,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Medal ID to retrieve",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1597,12 +1617,19 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "1.7",
 	Host:             "",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},

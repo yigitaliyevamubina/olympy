@@ -1,7 +1,6 @@
 package main
 
 import (
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"olympy/api-gateway/api"
 	"olympy/api-gateway/config"
@@ -12,6 +11,8 @@ import (
 	medalservice "olympy/api-gateway/genproto/medal_service"
 	streamservice "olympy/api-gateway/genproto/stream_service"
 	"os"
+
+	"google.golang.org/grpc/credentials/insecure"
 
 	athletehandlers "olympy/api-gateway/api/handlers/athlete-handlers"
 	authhandlers "olympy/api-gateway/api/handlers/auth-handlers"

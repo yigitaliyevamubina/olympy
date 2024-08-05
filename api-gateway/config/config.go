@@ -18,7 +18,10 @@ type (
 		StreamHost    string
 	}
 )
-
+const (
+	OtpSecret = "some_secret"
+	SignKey   = "dennic_key"
+)
 func (c *Config) Load() error {
 	if err := godotenv.Load(); err != nil {
 		fmt.Println("AAAAAAAAAAAAAAAAAAAAAA", err)

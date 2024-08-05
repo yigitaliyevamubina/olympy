@@ -82,13 +82,13 @@ func (m *MedalHandlers) EditMedal(ctx *gin.Context) {
 // @Tags Medal
 // @Accept json
 // @Produce json
-// @Param id path string true "Medal ID to delete"
+// @Param id query string true "Medal ID to delete"
 // @Success 200 {object} medalservice.Message
 // @Failure 400 {object} medalservice.Message
 // @Failure 500 {object} medalservice.Message
-// @Router /medals/delete/{id} [delete]
+// @Router /medals/delete [delete]
 func (m *MedalHandlers) DeleteMedal(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -113,13 +113,13 @@ func (m *MedalHandlers) DeleteMedal(ctx *gin.Context) {
 // @Tags Medal
 // @Accept json
 // @Produce json
-// @Param id path string true "Medal ID to retrieve"
+// @Param id query string true "Medal ID to retrieve"
 // @Success 200 {object} medalservice.Medal
 // @Failure 400 {object} medalservice.Message
 // @Failure 500 {object} medalservice.Message
-// @Router /medals/get/{id} [get]
+// @Router /medals/get [get]
 func (m *MedalHandlers) GetMedal(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {

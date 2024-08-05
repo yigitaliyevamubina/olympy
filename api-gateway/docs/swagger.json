@@ -4,7 +4,7 @@
         "description": "TEST",
         "title": "API",
         "contact": {},
-        "version": "1.0"
+        "version": "1.7"
     },
     "basePath": "/api/v1",
     "paths": {
@@ -54,7 +54,7 @@
                 }
             }
         },
-        "/athletes/delete/{id}": {
+        "/athletes/delete": {
             "delete": {
                 "description": "This endpoint deletes an athlete by its ID.",
                 "consumes": [
@@ -72,7 +72,7 @@
                         "type": "string",
                         "description": "Athlete ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -144,8 +144,13 @@
                 }
             }
         },
-        "/athletes/get/{id}": {
+        "/athletes/get": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves an athlete by its ID.",
                 "consumes": [
                     "application/json"
@@ -160,9 +165,9 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Athlete ID to retrieve",
+                        "description": "Athlete ID to get",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -190,6 +195,11 @@
         },
         "/athletes/getall": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves all athletes with pagination and optional filters.",
                 "consumes": [
                     "application/json"
@@ -435,7 +445,7 @@
                 }
             }
         },
-        "/countries/delete/{id}": {
+        "/countries/delete": {
             "delete": {
                 "description": "This endpoint deletes a country by its ID.",
                 "consumes": [
@@ -453,7 +463,7 @@
                         "type": "string",
                         "description": "Country ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -525,8 +535,13 @@
                 }
             }
         },
-        "/countries/get/{id}": {
+        "/countries/get": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves a country by its ID.",
                 "consumes": [
                     "application/json"
@@ -543,7 +558,7 @@
                         "type": "string",
                         "description": "Country ID to retrieve",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -571,6 +586,11 @@
         },
         "/countries/getall": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint retrieves all countries with pagination.",
                 "consumes": [
                     "application/json"
@@ -666,7 +686,7 @@
                 }
             }
         },
-        "/events/delete/{id}": {
+        "/events/delete": {
             "delete": {
                 "description": "This endpoint deletes an event by its ID.",
                 "consumes": [
@@ -684,7 +704,7 @@
                         "type": "string",
                         "description": "Event ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -756,7 +776,7 @@
                 }
             }
         },
-        "/events/get/{id}": {
+        "/events/get": {
             "get": {
                 "description": "This endpoint retrieves an event by its ID.",
                 "consumes": [
@@ -774,7 +794,7 @@
                         "type": "string",
                         "description": "Event ID to retrieve",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -954,7 +974,7 @@
                 }
             }
         },
-        "/medals/delete/{id}": {
+        "/medals/delete": {
             "delete": {
                 "description": "This endpoint deletes a medal by its ID.",
                 "consumes": [
@@ -972,7 +992,7 @@
                         "type": "string",
                         "description": "Medal ID to delete",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1044,7 +1064,7 @@
                 }
             }
         },
-        "/medals/get/{id}": {
+        "/medals/get": {
             "get": {
                 "description": "This endpoint retrieves a medal by its ID.",
                 "consumes": [
@@ -1062,7 +1082,7 @@
                         "type": "string",
                         "description": "Medal ID to retrieve",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1589,6 +1609,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

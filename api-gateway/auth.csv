@@ -1,0 +1,38 @@
+# Athlete endpoints
+p, unauthorized, /api/v1/athletes/add, POST
+p, unauthorized, /api/v1/athletes/delete, DELETE
+p, unauthorized, /api/v1/athletes/edit, PUT
+p, unauthorized, /api/v1/athletes/get, GET
+p, unauthorized, /api/v1/athletes/getall, GET
+
+# Auth endpoints
+p, unauthorized, /api/v1/auth/login, POST
+p, unauthorized, /api/v1/auth/refresh, POST
+p, unauthorized, /api/v1/auth/register, POST
+
+# Country endpoints
+p, unauthorized, /api/v1/countries/add, POST
+p, unauthorized, /api/v1/countries/delete, DELETE
+p, unauthorized, /api/v1/countries/edit, PUT
+p, unauthorized, /api/v1/countries/get, GET
+p, unauthorized, /api/v1/countries/getall, GET
+
+# Event endpoints
+p, unauthorized, /api/v1/events/add, POST
+p, unauthorized, /api/v1/events/delete, DELETE
+p, unauthorized, /api/v1/events/edit, PUT
+p, unauthorized, /api/v1/events/get, GET
+p, unauthorized, /api/v1/events/getall, GET
+p, unauthorized, /api/v1/events/search, GET
+
+# Medal endpoints
+p, unauthorized, /api/v1/medals/add, POST
+p, unauthorized, /api/v1/medals/delete, DELETE
+p, unauthorized, /api/v1/medals/edit, PUT
+p, unauthorized, /api/v1/medals/get, GET
+p, unauthorized, /api/v1/medals/getall, GET
+p, unauthorized, /api/v1/medals/ranking, GET
+
+# Live Streaming endpoints
+p, unauthorized, /api/v1/stream/send, POST
+

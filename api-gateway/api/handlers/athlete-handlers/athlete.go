@@ -82,13 +82,13 @@ func (a *AthleteHandlers) EditAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
-// @Param id path string true "Athlete ID to delete"
+// @Param id query string true "Athlete ID to delete"
 // @Success 200 {object} athleteservice.Message
 // @Failure 400 {object} athleteservice.Message
 // @Failure 500 {object} athleteservice.Message
-// @Router /athletes/delete/{id} [delete]
+// @Router /athletes/delete [delete]
 func (a *AthleteHandlers) DeleteAthlete(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -113,13 +113,14 @@ func (a *AthleteHandlers) DeleteAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
-// @Param id path string true "Athlete ID to retrieve"
+// @Security ApiKeyAuth
+// @Param id query string true "Athlete ID to get"
 // @Success 200 {object} athleteservice.Athlete
 // @Failure 400 {object} athleteservice.Message
 // @Failure 500 {object} athleteservice.Message
-// @Router /athletes/get/{id} [get]
+// @Router /athletes/get [get]
 func (a *AthleteHandlers) GetAthlete(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -144,6 +145,7 @@ func (a *AthleteHandlers) GetAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param page query int32 false "Page number" default(1)
 // @Param limit query int32 false "Number of items per page" default(10)
 // @Param country_id query int64 false "Country ID filter"

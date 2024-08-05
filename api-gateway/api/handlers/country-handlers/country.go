@@ -82,13 +82,13 @@ func (c *CountryHandlers) EditCountry(ctx *gin.Context) {
 // @Tags Country
 // @Accept json
 // @Produce json
-// @Param id path string true "Country ID to delete"
+// @Param id query string true "Country ID to delete"
 // @Success 200 {object} countryservice.Message
 // @Failure 400 {object} countryservice.Message
 // @Failure 500 {object} countryservice.Message
-// @Router /countries/delete/{id} [delete]
+// @Router /countries/delete [delete]
 func (c *CountryHandlers) DeleteCountry(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -113,13 +113,14 @@ func (c *CountryHandlers) DeleteCountry(ctx *gin.Context) {
 // @Tags Country
 // @Accept json
 // @Produce json
-// @Param id path string true "Country ID to retrieve"
+// @Security ApiKeyAuth
+// @Param id query string true "Country ID to retrieve"
 // @Success 200 {object} countryservice.Country
 // @Failure 400 {object} countryservice.Message
 // @Failure 500 {object} countryservice.Message
-// @Router /countries/get/{id} [get]
+// @Router /countries/get [get]
 func (c *CountryHandlers) GetCountry(ctx *gin.Context) {
-	idStr := ctx.Param("id")
+	idStr := ctx.Query("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -144,6 +145,7 @@ func (c *CountryHandlers) GetCountry(ctx *gin.Context) {
 // @Tags Country
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param page query int32 false "Page number" default(1)
 // @Param limit query int32 false "Number of items per page" default(10)
 // @Success 200 {object} countryservice.ListResponse
