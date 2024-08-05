@@ -32,7 +32,7 @@ CREATE TABLE events (
 CREATE TABLE athletes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    country_id INT REFERENCES countries(id),
+    country_id INT REFERENCES countries(id) ON DELETE CASCADE,
     sport_type VARCHAR(50) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -41,10 +41,10 @@ CREATE TABLE athletes (
 -- Medals table
 CREATE TABLE medals (
     id SERIAL PRIMARY KEY,
-    country_id INT REFERENCES countries(id),
+    country_id INT REFERENCES countries(id) ON DELETE CASCADE,
     type VARCHAR(10) CHECK (type IN ('Gold', 'Silver', 'Bronze')) NOT NULL,
-    event_id INT REFERENCES events(id),
-    athlete_id INT REFERENCES athletes(id),
+    event_id INT REFERENCES events(id) ON DELETE CASCADE,
+    athlete_id INT REFERENCES athletes(id) ON DELETE CASCADE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

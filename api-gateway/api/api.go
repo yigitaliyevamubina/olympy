@@ -52,6 +52,7 @@ func New(
 // @title API
 // @version 1.0
 // @description TEST
+// @BasePath /api/v1
 func (a *API) RUN() error {
 	router := gin.Default()
 
@@ -64,30 +65,30 @@ func (a *API) RUN() error {
 		api.POST("/auth/refresh", a.authhandler.RefreshToken) // Refresh access token
 
 		api.POST("/events/add", a.eventhandler.AddEvent)             // Add event
-		api.POST("/events/edit", a.eventhandler.EditEvent)           // Edit event
+		api.PUT("/events/edit", a.eventhandler.EditEvent)            // Edit event
 		api.DELETE("/events/delete/:id", a.eventhandler.DeleteEvent) // Delete event by ID
 		api.GET("/events/get/:id", a.eventhandler.GetEvent)          // Get event by ID
-		api.POST("/events/getall", a.eventhandler.GetAllEvents)      // Get all events
-		api.POST("/events/search", a.eventhandler.SearchEvents)      // Search events
+		api.GET("/events/getall", a.eventhandler.GetAllEvents)      // Get all events
+		api.GET("/events/search", a.eventhandler.SearchEvents)      // Search events
 
 		api.POST("/countries/add", a.countryhandler.AddCountry)             // Add country
-		api.POST("/countries/edit", a.countryhandler.EditCountry)           // Edit country
+		api.PUT("/countries/edit", a.countryhandler.EditCountry)            // Edit country
 		api.DELETE("/countries/delete/:id", a.countryhandler.DeleteCountry) // Delete country by ID
 		api.GET("/countries/get/:id", a.countryhandler.GetCountry)          // Get country by ID
-		api.POST("/countries/getall", a.countryhandler.ListCountries)       // List countries
+		api.GET("/countries/getall", a.countryhandler.ListCountries)       // List countries
 
 		api.POST("/medals/add", a.medalhandler.AddMedal)             // Add medal
-		api.POST("/medals/edit", a.medalhandler.EditMedal)           // Edit medal
+		api.PUT("/medals/edit", a.medalhandler.EditMedal)            // Edit medal
 		api.DELETE("/medals/delete/:id", a.medalhandler.DeleteMedal) // Delete medal by ID
 		api.GET("/medals/get/:id", a.medalhandler.GetMedal)          // Get medal by ID
-		api.POST("/medals/getall", a.medalhandler.ListMedals)        // List medals
+		api.GET("/medals/getall", a.medalhandler.ListMedals)        // List medals
 		api.GET("/medals/ranking", a.medalhandler.GetMedalRanking)   // Get country rankings sorted by the number of medals
 
 		api.POST("/athletes/add", a.athletehandler.AddAthlete)             // Add athlete
-		api.POST("/athletes/edit", a.athletehandler.EditAthlete)           // Edit athlete
+		api.PUT("/athletes/edit", a.athletehandler.EditAthlete)            // Edit athlete
 		api.DELETE("/athletes/delete/:id", a.athletehandler.DeleteAthlete) // Delete athlete by ID
 		api.GET("/athletes/get/:id", a.athletehandler.GetAthlete)          // Get athlete by ID
-		api.POST("/athletes/getall", a.athletehandler.ListAthletes)        // List athletes
+		api.GET("/athletes/getall", a.athletehandler.ListAthletes)        // List athletes
 		api.POST("/stream/send", a.streamhandlers.SendEvent)               // Send
 	}
 

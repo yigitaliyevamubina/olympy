@@ -32,7 +32,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	api := api.New(service.New(*medalstorage, *countrystorage))
+	api := api.New(service.NewMedalService(*medalstorage), service.NewCountryService(*countrystorage))
 
 	log.Fatal(api.RUN(configs))
 }

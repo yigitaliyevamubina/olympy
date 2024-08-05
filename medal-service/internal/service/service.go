@@ -12,16 +12,25 @@ import (
 type (
 	MedalService struct {
 		modelservice.UnimplementedMedalServiceServer
-		medalStorage   storage.Medal
+		medalStorage storage.Medal
+		logger       *log.Logger
+	}
+	CountryService struct {
+		countryservice.UnimplementedCountryServiceServer
 		countryStorage storage.Country
 		logger         *log.Logger
-		countryservice.UnimplementedCountryServiceServer
 	}
 )
 
-func New(modelservice storage.Medal, countryservice storage.Country) *MedalService {
+func NewMedalService(modelservice storage.Medal) *MedalService {
 	return &MedalService{
-		medalStorage:   modelservice,
+		medalStorage: modelservice,
+		logger:       log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
+	}
+}
+
+func NewCountryService(countryservice storage.Country) *CountryService {
+	return &CountryService{
 		countryStorage: countryservice,
 		logger:         log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
 	}
@@ -58,27 +67,27 @@ func (s *MedalService) GetMedalRanking(ctx context.Context, req *modelservice.Em
 }
 
 // country service
-func (s *MedalService) AddCountry(ctx context.Context, req *countryservice.Country) (*countryservice.Country, error) {
+func (s *CountryService) AddCountry(ctx context.Context, req *countryservice.Country) (*countryservice.Country, error) {
 	s.logger.Println("Add Country Request")
 	return s.countryStorage.AddCountry(ctx, req)
 }
 
-func (s *MedalService) EditCountry(ctx context.Context, req *countryservice.Country) (*countryservice.Country, error) {
+func (s *CountryService) EditCountry(ctx context.Context, req *countryservice.Country) (*countryservice.Country, error) {
 	s.logger.Println("Edit Country Request")
 	return s.countryStorage.EditCountry(ctx, req)
 }
 
-func (s *MedalService) DeleteCountry(ctx context.Context, req *countryservice.GetSingleRequest) (*countryservice.Message, error) {
+func (s *CountryService) DeleteCountry(ctx context.Context, req *countryservice.GetSingleRequest) (*countryservice.Message, error) {
 	s.logger.Println("Delete Country Request")
 	return s.countryStorage.DeleteCountry(ctx, req)
 }
 
-func (s *MedalService) GetCountry(ctx context.Context, req *countryservice.GetSingleRequest) (*countryservice.Country, error) {
+func (s *CountryService) GetCountry(ctx context.Context, req *countryservice.GetSingleRequest) (*countryservice.Country, error) {
 	s.logger.Println("Get Country Request")
 	return s.countryStorage.GetCountry(ctx, req)
 }
 
-func (s *MedalService) ListCountries(ctx context.Context, req *countryservice.ListRequest) (*countryservice.ListResponse, error) {
+func (s *CountryService) ListCountries(ctx context.Context, req *countryservice.ListRequest) (*countryservice.ListResponse, error) {
 	s.logger.Println("List Countries Request")
 	return s.countryStorage.ListCountries(ctx, req)
 }

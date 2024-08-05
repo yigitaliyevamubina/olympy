@@ -23,6 +23,7 @@ func NewAthleteHandlers(client athleteservice.AthleteServiceClient, logger *log.
 // AddAthlete godoc
 // @Summary Add an athlete
 // @Description This endpoint adds a new athlete.
+// @Tags Athlete
 // @Accept json
 // @Produce json
 // @Param request body athleteservice.Athlete true "Athlete details to add"
@@ -50,13 +51,14 @@ func (a *AthleteHandlers) AddAthlete(ctx *gin.Context) {
 // EditAthlete godoc
 // @Summary Edit an athlete
 // @Description This endpoint edits an existing athlete.
+// @Tags Athlete
 // @Accept json
 // @Produce json
 // @Param request body athleteservice.Athlete true "Athlete details to edit"
 // @Success 200 {object} athleteservice.Athlete
 // @Failure 400 {object} athleteservice.Message
 // @Failure 500 {object} athleteservice.Message
-// @Router /athletes/edit [post]
+// @Router /athletes/edit [put]
 func (a *AthleteHandlers) EditAthlete(ctx *gin.Context) {
 	var req athleteservice.Athlete
 
@@ -77,6 +79,7 @@ func (a *AthleteHandlers) EditAthlete(ctx *gin.Context) {
 // DeleteAthlete godoc
 // @Summary Delete an athlete
 // @Description This endpoint deletes an athlete by its ID.
+// @Tags Athlete
 // @Accept json
 // @Produce json
 // @Param id path string true "Athlete ID to delete"
@@ -107,6 +110,7 @@ func (a *AthleteHandlers) DeleteAthlete(ctx *gin.Context) {
 // GetAthlete godoc
 // @Summary Get an athlete
 // @Description This endpoint retrieves an athlete by its ID.
+// @Tags Athlete
 // @Accept json
 // @Produce json
 // @Param id path string true "Athlete ID to retrieve"
@@ -137,22 +141,52 @@ func (a *AthleteHandlers) GetAthlete(ctx *gin.Context) {
 // ListAthletes godoc
 // @Summary List athletes
 // @Description This endpoint retrieves all athletes with pagination and optional filters.
+// @Tags Athlete
 // @Accept json
 // @Produce json
-// @Param request body athleteservice.ListRequest true "Pagination and filter parameters"
+// @Param page query int32 false "Page number" default(1)
+// @Param limit query int32 false "Number of items per page" default(10)
+// @Param country_id query int64 false "Country ID filter"
+// @Param sport_type query string false "Sport type filter"
 // @Success 200 {object} athleteservice.ListResponse
 // @Failure 400 {object} athleteservice.Message
 // @Failure 500 {object} athleteservice.Message
-// @Router /athletes/getall [post]
+// @Router /athletes/getall [get]
 func (a *AthleteHandlers) ListAthletes(ctx *gin.Context) {
-	var req athleteservice.ListRequest
+	pageStr := ctx.DefaultQuery("page", "1")
+	limitStr := ctx.DefaultQuery("limit", "10")
+	countryIDStr := ctx.Query("country_id")
+	sportType := ctx.Query("sport_type")
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
+	page, err := strconv.ParseInt(pageStr, 10, 32)
+	if err != nil {
+		ctx.IndentedJSON(400, gin.H{"error": "Invalid page number"})
 		return
 	}
 
-	resp, err := a.client.ListAthletes(ctx, &req)
+	limit, err := strconv.ParseInt(limitStr, 10, 32)
+	if err != nil {
+		ctx.IndentedJSON(400, gin.H{"error": "Invalid limit number"})
+		return
+	}
+
+	var countryID int64
+	if countryIDStr != "" {
+		countryID, err = strconv.ParseInt(countryIDStr, 10, 64)
+		if err != nil {
+			ctx.IndentedJSON(400, gin.H{"error": "Invalid country ID"})
+			return
+		}
+	}
+
+	req := &athleteservice.ListRequest{
+		Page:      int32(page),
+		Limit:     int32(limit),
+		CountryId: countryID,
+		SportType: sportType,
+	}
+
+	resp, err := a.client.ListAthletes(ctx, req)
 	if err != nil {
 		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
 		return

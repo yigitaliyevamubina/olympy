@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	countryservice "olympy/medal-service/genproto/country_service"
 	modelservice "olympy/medal-service/genproto/medal_service"
 	"olympy/medal-service/internal/config"
 
@@ -12,13 +13,15 @@ import (
 
 type (
 	API struct {
-		service modelservice.MedalServiceServer
+		medalservice   modelservice.MedalServiceServer
+		countryservice countryservice.CountryServiceServer
 	}
 )
 
-func New(service modelservice.MedalServiceServer) *API {
+func New(medalservice modelservice.MedalServiceServer, countryservice countryservice.CountryServiceServer) *API {
 	return &API{
-		service: service,
+		medalservice:   medalservice,
+		countryservice: countryservice,
 	}
 }
 
@@ -29,7 +32,8 @@ func (a *API) RUN(config *config.Config) error {
 	}
 
 	serverRegisterer := grpc.NewServer()
-	modelservice.RegisterMedalServiceServer(serverRegisterer, a.service)
+	modelservice.RegisterMedalServiceServer(serverRegisterer, a.medalservice)
+	countryservice.RegisterCountryServiceServer(serverRegisterer, a.countryservice)
 
 	log.Println("server has started running on port", config.Server.Port)
 

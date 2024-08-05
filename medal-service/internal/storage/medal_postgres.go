@@ -10,8 +10,6 @@ import (
 	"github.com/Masterminds/squirrel"
 
 	medalproto "olympy/medal-service/genproto/medal_service"
-
-	"github.com/google/uuid"
 )
 
 type Medal struct {
@@ -33,7 +31,6 @@ func NewMedalService(config *config.Config) (*Medal, error) {
 
 func (m *Medal) AddMedal(ctx context.Context, req *medalproto.Medal) (*medalproto.Medal, error) {
 	data := map[string]interface{}{
-		"id":         uuid.New().ID(),
 		"country_id": req.CountryId,
 		"type":       req.Type,
 		"event_id":   req.EventId,
@@ -44,17 +41,20 @@ func (m *Medal) AddMedal(ctx context.Context, req *medalproto.Medal) (*medalprot
 
 	query, args, err := m.queryBuilder.Insert("medals").
 		SetMap(data).
+		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build SQL query: %v", err)
 	}
 
-	if _, err := m.db.ExecContext(ctx, query, args...); err != nil {
-		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
+	var id int64
+
+	if err := m.db.QueryRowContext(ctx, query, args...).Scan(&id); err != nil {
+		return nil, fmt.Errorf("failed to fetch inserted ID: %v", err)
 	}
 
 	return &medalproto.Medal{
-		Id:        data["id"].(int64),
+		Id:        id,
 		CountryId: req.CountryId,
 		Type:      req.Type,
 		EventId:   req.EventId,
