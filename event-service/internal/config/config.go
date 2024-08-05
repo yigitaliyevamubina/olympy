@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -40,31 +41,38 @@ type JWTConfig struct {
 }
 
 func (c *Config) Load() error {
-	err := godotenv.Load()
-	if err != nil {
-		return err
+	if err := godotenv.Load(); err != nil {
+		// Log a warning but don't fail if the .env file is not found
+		log.Println("Warning: .env file not found or failed to load.")
 	}
 
-	c.Server.Port = ":" + os.Getenv("SERVER_PORT")
-	c.Database.Host = os.Getenv("DB_HOST")
-	c.Database.Port = os.Getenv("DB_PORT")
-	c.Database.User = os.Getenv("DB_USER")
-	c.Database.Password = os.Getenv("DB_PASSWORD")
-	c.Database.DBName = os.Getenv("DB_NAME")
+	c.Server.Port = ":" + getEnv("SERVER_PORT", "4444")
+	c.Database.Host = getEnv("DB_HOST", "localhost")
+	c.Database.Port = getEnv("DB_PORT", "5544")
+	c.Database.User = getEnv("DB_USER", "postgres")
+	c.Database.Password = getEnv("DB_PASSWORD", "1234")
+	c.Database.DBName = getEnv("DB_NAME", "olympydb")
 
-	c.Redis.Addr = os.Getenv("REDIS_ADDR")
-	c.Redis.Password = os.Getenv("REDIS_PASSWORD")
+	c.Redis.Addr = getEnv("REDIS_ADDR", "localhost:6379")
+	c.Redis.Password = getEnv("REDIS_PASSWORD", "")
 	c.Redis.DB = 0
 
-	ac := os.Getenv("JWT_ACCESS_TOKEN_EXP")
+	ac := getEnv("JWT_ACCESS_TOKEN_EXP", "15")
 	intacc, _ := strconv.Atoi(ac)
-	re := os.Getenv("JWT_REFRESH_TOKEN_EXP")
+	re := getEnv("JWT_REFRESH_TOKEN_EXP", "10080") // Default to 7 days in minutes
 	intref, _ := strconv.Atoi(re)
-	c.JWT.Secret = os.Getenv("JWT_SECRET")
+	c.JWT.Secret = getEnv("JWT_SECRET", "your_jwt_secret")
 	c.JWT.AccessTokenExp = time.Duration(intacc) * time.Minute
 	c.JWT.RefreshTokenExp = time.Duration(intref) * time.Minute
 
 	return nil
+}
+
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
 }
 
 func New() (*Config, error) {

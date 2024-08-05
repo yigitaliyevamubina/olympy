@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
 	"olympy/event-service/api"
 	"olympy/event-service/internal/config"
 	service "olympy/event-service/internal/service"
 	"olympy/event-service/internal/storage"
-	"log"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -20,19 +20,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	migrateDB()
+	MigrateDB()
 
 	storage, err := storage.NewEventService(configs)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	api := api.New(service.NewEventService(*storage))
 
 	log.Fatal(api.RUN(configs))
 }
 
-func migrateDB() {
+func MigrateDB() {
 	databaseURL, ok := os.LookupEnv("PG_URL")
 	if !ok || len(databaseURL) == 0 {
 		log.Fatalf("migrate: environment variable PG_URL not declared or empty")
