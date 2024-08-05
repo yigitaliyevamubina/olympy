@@ -10,7 +10,6 @@ import (
 	countryproto "olympy/medal-service/genproto/country_service"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/google/uuid"
 )
 
 type Country struct {
@@ -32,7 +31,6 @@ func NewCountryService(config *config.Config) (*Country, error) {
 
 func (c *Country) AddCountry(ctx context.Context, req *countryproto.Country) (*countryproto.Country, error) {
 	data := map[string]interface{}{
-		"id":         uuid.New().ID(),
 		"name":       req.Name,
 		"flag":       req.Flag,
 		"created_at": time.Now(),
@@ -41,17 +39,20 @@ func (c *Country) AddCountry(ctx context.Context, req *countryproto.Country) (*c
 
 	query, args, err := c.queryBuilder.Insert("countries").
 		SetMap(data).
+		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build SQL query: %v", err)
 	}
 
-	if _, err := c.db.ExecContext(ctx, query, args...); err != nil {
-		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
+	var id int64
+
+	if err := c.db.QueryRowContext(ctx, query, args...).Scan(&id); err != nil {
+		return nil, fmt.Errorf("failed to fetch inserted ID: %v", err)
 	}
 
 	return &countryproto.Country{
-		Id:        data["id"].(int64),
+		Id:        id,
 		Name:      req.Name,
 		Flag:      req.Flag,
 		CreatedAt: data["created_at"].(time.Time).String(),

@@ -22,6 +22,7 @@ func NewAuthHandlers(client genprotos.AuthServiceClient, logger *log.Logger) *Au
 // Register godoc
 // @Summary Register user
 // @Description This endpoint for registering user.
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param request body genprotos.RegisterUserRequest true "User details to register"
@@ -49,6 +50,7 @@ func (a *AuthHandlers) Register(ctx *gin.Context) {
 // Login godoc
 // @Summary Login user
 // @Description This endpoint for logging in user.
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param request body genprotos.LoginUserRequest true "User login details"
@@ -76,6 +78,7 @@ func (a *AuthHandlers) Login(ctx *gin.Context) {
 // RefreshToken godoc
 // @Summary Refresh access token
 // @Description This endpoint for refreshing access token using refresh token.
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param request body genprotos.RefreshTokenRequest true "Refresh token details"

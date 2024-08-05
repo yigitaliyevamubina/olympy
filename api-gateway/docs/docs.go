@@ -24,6 +24,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Athlete"
+                ],
                 "summary": "Add an athlete",
                 "parameters": [
                     {
@@ -67,6 +70,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Athlete"
+                ],
                 "summary": "Delete an athlete",
                 "parameters": [
                     {
@@ -100,13 +106,16 @@ const docTemplate = `{
             }
         },
         "/athletes/edit": {
-            "post": {
+            "put": {
                 "description": "This endpoint edits an existing athlete.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Athlete"
                 ],
                 "summary": "Edit an athlete",
                 "parameters": [
@@ -151,6 +160,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Athlete"
+                ],
                 "summary": "Get an athlete",
                 "parameters": [
                     {
@@ -184,7 +196,7 @@ const docTemplate = `{
             }
         },
         "/athletes/getall": {
-            "post": {
+            "get": {
                 "description": "This endpoint retrieves all athletes with pagination and optional filters.",
                 "consumes": [
                     "application/json"
@@ -192,16 +204,36 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Athlete"
+                ],
                 "summary": "List athletes",
                 "parameters": [
                     {
-                        "description": "Pagination and filter parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_athlete_service.ListRequest"
-                        }
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Country ID filter",
+                        "name": "country_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sport type filter",
+                        "name": "sport_type",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -234,6 +266,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Auth"
                 ],
                 "summary": "Login user",
                 "parameters": [
@@ -278,6 +313,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Refresh access token",
                 "parameters": [
                     {
@@ -320,6 +358,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Auth"
                 ],
                 "summary": "Register user",
                 "parameters": [
@@ -364,6 +405,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Country"
+                ],
                 "summary": "Add a country",
                 "parameters": [
                     {
@@ -407,6 +451,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Country"
+                ],
                 "summary": "Delete a country",
                 "parameters": [
                     {
@@ -440,13 +487,16 @@ const docTemplate = `{
             }
         },
         "/countries/edit": {
-            "post": {
+            "put": {
                 "description": "This endpoint edits an existing country.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Country"
                 ],
                 "summary": "Edit a country",
                 "parameters": [
@@ -491,6 +541,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Country"
+                ],
                 "summary": "Get a country",
                 "parameters": [
                     {
@@ -524,7 +577,7 @@ const docTemplate = `{
             }
         },
         "/countries/getall": {
-            "post": {
+            "get": {
                 "description": "This endpoint retrieves all countries with pagination.",
                 "consumes": [
                     "application/json"
@@ -532,16 +585,24 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Country"
+                ],
                 "summary": "List countries",
                 "parameters": [
                     {
-                        "description": "Pagination parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_country_service.ListRequest"
-                        }
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -574,6 +635,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Event"
                 ],
                 "summary": "Add an event",
                 "parameters": [
@@ -618,6 +682,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Event"
+                ],
                 "summary": "Delete an event",
                 "parameters": [
                     {
@@ -651,13 +718,16 @@ const docTemplate = `{
             }
         },
         "/events/edit": {
-            "post": {
+            "put": {
                 "description": "This endpoint edits an existing event.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Event"
                 ],
                 "summary": "Edit an event",
                 "parameters": [
@@ -702,6 +772,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Event"
+                ],
                 "summary": "Get an event",
                 "parameters": [
                     {
@@ -735,7 +808,7 @@ const docTemplate = `{
             }
         },
         "/events/getall": {
-            "post": {
+            "get": {
                 "description": "This endpoint retrieves all events with pagination.",
                 "consumes": [
                     "application/json"
@@ -743,16 +816,24 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Event"
+                ],
                 "summary": "Get all events",
                 "parameters": [
                     {
-                        "description": "Pagination parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsRequest"
-                        }
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "page_size",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -778,7 +859,7 @@ const docTemplate = `{
             }
         },
         "/events/search": {
-            "post": {
+            "get": {
                 "description": "This endpoint searches events by query with pagination.",
                 "consumes": [
                     "application/json"
@@ -786,16 +867,30 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Event"
+                ],
                 "summary": "Search events",
                 "parameters": [
                     {
-                        "description": "Search parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_event_service.SearchEventsRequest"
-                        }
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "page_size",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -828,6 +923,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Medal"
                 ],
                 "summary": "Add a medal",
                 "parameters": [
@@ -872,6 +970,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Medal"
+                ],
                 "summary": "Delete a medal",
                 "parameters": [
                     {
@@ -905,13 +1006,16 @@ const docTemplate = `{
             }
         },
         "/medals/edit": {
-            "post": {
+            "put": {
                 "description": "This endpoint edits an existing medal.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Medal"
                 ],
                 "summary": "Edit a medal",
                 "parameters": [
@@ -956,6 +1060,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Medal"
+                ],
                 "summary": "Get a medal",
                 "parameters": [
                     {
@@ -989,7 +1096,7 @@ const docTemplate = `{
             }
         },
         "/medals/getall": {
-            "post": {
+            "get": {
                 "description": "This endpoint retrieves all medals with pagination and optional filters.",
                 "consumes": [
                     "application/json"
@@ -997,16 +1104,42 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Medal"
+                ],
                 "summary": "List medals",
                 "parameters": [
                     {
-                        "description": "Pagination and filter parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/olympy_api-gateway_genproto_medal_service.ListRequest"
-                        }
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Country ID",
+                        "name": "country",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "event_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Athlete ID",
+                        "name": "athlete_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1040,6 +1173,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Medal"
+                ],
                 "summary": "Get medal rankings",
                 "responses": {
                     "200": {
@@ -1066,6 +1202,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Live Streaming"
+                ],
                 "summary": "Send an event to the streaming service",
                 "parameters": [
                     {
@@ -1088,13 +1227,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse"
                         }
                     }
                 }
@@ -1121,23 +1260,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "olympy_api-gateway_genproto_athlete_service.ListRequest": {
-            "type": "object",
-            "properties": {
-                "country_id": {
-                    "type": "integer"
-                },
-                "limit": {
-                    "type": "integer"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "sport_type": {
                     "type": "string"
                 }
             }
@@ -1270,17 +1392,6 @@ const docTemplate = `{
                 }
             }
         },
-        "olympy_api-gateway_genproto_country_service.ListRequest": {
-            "type": "object",
-            "properties": {
-                "limit": {
-                    "type": "integer"
-                },
-                "page": {
-                    "type": "integer"
-                }
-            }
-        },
         "olympy_api-gateway_genproto_country_service.ListResponse": {
             "type": "object",
             "properties": {
@@ -1342,7 +1453,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -1352,17 +1463,6 @@ const docTemplate = `{
                 },
                 "start_time": {
                     "type": "string"
-                }
-            }
-        },
-        "olympy_api-gateway_genproto_event_service.GetAllEventsRequest": {
-            "type": "object",
-            "properties": {
-                "page": {
-                    "type": "integer"
-                },
-                "page_size": {
-                    "type": "integer"
                 }
             }
         },
@@ -1396,20 +1496,6 @@ const docTemplate = `{
                 }
             }
         },
-        "olympy_api-gateway_genproto_event_service.SearchEventsRequest": {
-            "type": "object",
-            "properties": {
-                "page": {
-                    "type": "integer"
-                },
-                "page_size": {
-                    "type": "integer"
-                },
-                "query": {
-                    "type": "string"
-                }
-            }
-        },
         "olympy_api-gateway_genproto_medal_service.CountryMedalCount": {
             "type": "object",
             "properties": {
@@ -1429,26 +1515,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "silver": {
-                    "type": "integer"
-                }
-            }
-        },
-        "olympy_api-gateway_genproto_medal_service.ListRequest": {
-            "type": "object",
-            "properties": {
-                "athlete_id": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "integer"
-                },
-                "event_id": {
-                    "type": "integer"
-                },
-                "limit": {
-                    "type": "integer"
-                },
-                "page": {
                     "type": "integer"
                 }
             }
@@ -1538,7 +1604,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "API",
 	Description:      "TEST",

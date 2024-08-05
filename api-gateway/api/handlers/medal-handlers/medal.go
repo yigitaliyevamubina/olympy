@@ -23,6 +23,7 @@ func NewMedalHandlers(client medalservice.MedalServiceClient, logger *log.Logger
 // AddMedal godoc
 // @Summary Add a medal
 // @Description This endpoint adds a new medal.
+// @Tags Medal
 // @Accept json
 // @Produce json
 // @Param request body medalservice.Medal true "Medal details to add"
@@ -50,13 +51,14 @@ func (m *MedalHandlers) AddMedal(ctx *gin.Context) {
 // EditMedal godoc
 // @Summary Edit a medal
 // @Description This endpoint edits an existing medal.
+// @Tags Medal
 // @Accept json
 // @Produce json
 // @Param request body medalservice.Medal true "Medal details to edit"
 // @Success 200 {object} medalservice.Medal
 // @Failure 400 {object} medalservice.Message
 // @Failure 500 {object} medalservice.Message
-// @Router /medals/edit [post]
+// @Router /medals/edit [put]
 func (m *MedalHandlers) EditMedal(ctx *gin.Context) {
 	var req medalservice.Medal
 
@@ -77,6 +79,7 @@ func (m *MedalHandlers) EditMedal(ctx *gin.Context) {
 // DeleteMedal godoc
 // @Summary Delete a medal
 // @Description This endpoint deletes a medal by its ID.
+// @Tags Medal
 // @Accept json
 // @Produce json
 // @Param id path string true "Medal ID to delete"
@@ -107,6 +110,7 @@ func (m *MedalHandlers) DeleteMedal(ctx *gin.Context) {
 // GetMedal godoc
 // @Summary Get a medal
 // @Description This endpoint retrieves a medal by its ID.
+// @Tags Medal
 // @Accept json
 // @Produce json
 // @Param id path string true "Medal ID to retrieve"
@@ -137,22 +141,64 @@ func (m *MedalHandlers) GetMedal(ctx *gin.Context) {
 // ListMedals godoc
 // @Summary List medals
 // @Description This endpoint retrieves all medals with pagination and optional filters.
+// @Tags Medal
 // @Accept json
 // @Produce json
-// @Param request body medalservice.ListRequest true "Pagination and filter parameters"
+// @Param page query int32 false "Page number" default(1)
+// @Param limit query int32 false "Number of items per page" default(10)
+// @Param country query int64 false "Country ID"
+// @Param event_id query int64 false "Event ID"
+// @Param athlete_id query string false "Athlete ID"
 // @Success 200 {object} medalservice.ListResponse
 // @Failure 400 {object} medalservice.Message
 // @Failure 500 {object} medalservice.Message
-// @Router /medals/getall [post]
+// @Router /medals/getall [get]
 func (m *MedalHandlers) ListMedals(ctx *gin.Context) {
-	var req medalservice.ListRequest
+	pageStr := ctx.DefaultQuery("page", "1")
+	limitStr := ctx.DefaultQuery("limit", "10")
+	countryStr := ctx.Query("country")
+	eventIdStr := ctx.Query("event_id")
+	athleteId := ctx.Query("athlete_id")
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
+	page, err := strconv.ParseInt(pageStr, 10, 32)
+	if err != nil {
+		ctx.IndentedJSON(400, gin.H{"error": "Invalid page number"})
 		return
 	}
 
-	resp, err := m.client.ListMedals(ctx, &req)
+	limit, err := strconv.ParseInt(limitStr, 10, 32)
+	if err != nil {
+		ctx.IndentedJSON(400, gin.H{"error": "Invalid limit number"})
+		return
+	}
+
+	var country int64
+	if countryStr != "" {
+		country, err = strconv.ParseInt(countryStr, 10, 64)
+		if err != nil {
+			ctx.IndentedJSON(400, gin.H{"error": "Invalid country ID"})
+			return
+		}
+	}
+
+	var eventId int64
+	if eventIdStr != "" {
+		eventId, err = strconv.ParseInt(eventIdStr, 10, 64)
+		if err != nil {
+			ctx.IndentedJSON(400, gin.H{"error": "Invalid event ID"})
+			return
+		}
+	}
+
+	req := &medalservice.ListRequest{
+		Page:      int32(page),
+		Limit:     int32(limit),
+		Country:   country,
+		EventId:   eventId,
+		AthleteId: athleteId,
+	}
+
+	resp, err := m.client.ListMedals(ctx, req)
 	if err != nil {
 		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
 		return
@@ -164,6 +210,7 @@ func (m *MedalHandlers) ListMedals(ctx *gin.Context) {
 // GetMedalRanking godoc
 // @Summary Get medal rankings
 // @Description This endpoint retrieves the ranking of countries based on medals.
+// @Tags Medal
 // @Accept json
 // @Produce json
 // @Success 200 {object} medalservice.MedalRankingResponse

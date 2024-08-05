@@ -23,6 +23,7 @@ func NewCountryHandlers(client countryservice.CountryServiceClient, logger *log.
 // AddCountry godoc
 // @Summary Add a country
 // @Description This endpoint adds a new country.
+// @Tags Country
 // @Accept json
 // @Produce json
 // @Param request body countryservice.Country true "Country details to add"
@@ -50,13 +51,14 @@ func (c *CountryHandlers) AddCountry(ctx *gin.Context) {
 // EditCountry godoc
 // @Summary Edit a country
 // @Description This endpoint edits an existing country.
+// @Tags Country
 // @Accept json
 // @Produce json
 // @Param request body countryservice.Country true "Country details to edit"
 // @Success 200 {object} countryservice.Country
 // @Failure 400 {object} countryservice.Message
 // @Failure 500 {object} countryservice.Message
-// @Router /countries/edit [post]
+// @Router /countries/edit [put]
 func (c *CountryHandlers) EditCountry(ctx *gin.Context) {
 	var req countryservice.Country
 
@@ -77,6 +79,7 @@ func (c *CountryHandlers) EditCountry(ctx *gin.Context) {
 // DeleteCountry godoc
 // @Summary Delete a country
 // @Description This endpoint deletes a country by its ID.
+// @Tags Country
 // @Accept json
 // @Produce json
 // @Param id path string true "Country ID to delete"
@@ -107,6 +110,7 @@ func (c *CountryHandlers) DeleteCountry(ctx *gin.Context) {
 // GetCountry godoc
 // @Summary Get a country
 // @Description This endpoint retrieves a country by its ID.
+// @Tags Country
 // @Accept json
 // @Produce json
 // @Param id path string true "Country ID to retrieve"
@@ -137,22 +141,37 @@ func (c *CountryHandlers) GetCountry(ctx *gin.Context) {
 // ListCountries godoc
 // @Summary List countries
 // @Description This endpoint retrieves all countries with pagination.
+// @Tags Country
 // @Accept json
 // @Produce json
-// @Param request body countryservice.ListRequest true "Pagination parameters"
+// @Param page query int32 false "Page number" default(1)
+// @Param limit query int32 false "Number of items per page" default(10)
 // @Success 200 {object} countryservice.ListResponse
 // @Failure 400 {object} countryservice.Message
 // @Failure 500 {object} countryservice.Message
-// @Router /countries/getall [post]
+// @Router /countries/getall [get]
 func (c *CountryHandlers) ListCountries(ctx *gin.Context) {
-	var req countryservice.ListRequest
+	pageStr := ctx.DefaultQuery("page", "1")
+	limitStr := ctx.DefaultQuery("limit", "10")
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.IndentedJSON(400, gin.H{"error": err.Error()})
+	page, err := strconv.ParseInt(pageStr, 10, 32)
+	if err != nil {
+		ctx.IndentedJSON(400, gin.H{"error": "Invalid page number"})
 		return
 	}
 
-	resp, err := c.client.ListCountries(ctx, &req)
+	limit, err := strconv.ParseInt(limitStr, 10, 32)
+	if err != nil {
+		ctx.IndentedJSON(400, gin.H{"error": "Invalid limit number"})
+		return
+	}
+
+	req := &countryservice.ListRequest{
+		Page:  int32(page),
+		Limit: int32(limit),
+	}
+
+	resp, err := c.client.ListCountries(ctx, req)
 	if err != nil {
 		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
 		return

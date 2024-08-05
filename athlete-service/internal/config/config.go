@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -26,19 +27,27 @@ type DatabaseConfig struct {
 }
 
 func (c *Config) Load() error {
+
 	err := godotenv.Load()
 	if err != nil {
-		return err
+		fmt.Println(".env file not found, proceeding with other environment variables")
 	}
 
-	c.Server.Port = ":" + os.Getenv("SERVER_PORT")
-	c.Database.Host = os.Getenv("DB_HOST")
-	c.Database.Port = os.Getenv("DB_PORT")
-	c.Database.User = os.Getenv("DB_USER")
-	c.Database.Password = os.Getenv("DB_PASSWORD")
-	c.Database.DBName = os.Getenv("DB_NAME")
+	c.Server.Port = ":" + getEnv("SERVER_PORT", "6666")
+	c.Database.Host = getEnv("DB_HOST", "localhost")
+	c.Database.Port = getEnv("DB_PORT", "5544")
+	c.Database.User = getEnv("DB_USER", "postgres")
+	c.Database.Password = getEnv("DB_PASSWORD", "1234")
+	c.Database.DBName = getEnv("DB_NAME", "olympydb")
 
 	return nil
+}
+
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
 }
 
 func New() (*Config, error) {

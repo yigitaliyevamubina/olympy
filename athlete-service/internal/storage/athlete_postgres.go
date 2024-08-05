@@ -41,17 +41,20 @@ func (a *Athlete) AddAthlete(ctx context.Context, req *athleteservice.Athlete) (
 
 	query, args, err := a.queryBuilder.Insert("athletes").
 		SetMap(data).
+		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build SQL query: %v", err)
 	}
 
-	if _, err := a.db.ExecContext(ctx, query, args...); err != nil {
-		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
+	var id int64
+
+	if err := a.db.QueryRowContext(ctx, query, args...).Scan(&id); err != nil {
+		return nil, fmt.Errorf("failed to scan row: %v", err)
 	}
 
 	return &athleteservice.Athlete{
-		Id:        data["id"].(int64),
+		Id:        id,
 		Name:      req.Name,
 		CountryId: req.CountryId,
 		SportType: req.SportType,
@@ -129,7 +132,7 @@ func (a *Athlete) ListAthletes(ctx context.Context, req *athleteservice.ListRequ
 	var athletes []*athleteservice.Athlete
 	var total int64
 
-	query := squirrel.Select("id", "name", "country_id", "sport_type", "created_at", "updated_at").
+	query := a.queryBuilder.Select("id", "name", "country_id", "sport_type", "created_at", "updated_at").
 		From("athletes").
 		Limit(uint64(req.Limit)).
 		Offset(uint64((req.Page - 1) * req.Limit))
@@ -140,8 +143,14 @@ func (a *Athlete) ListAthletes(ctx context.Context, req *athleteservice.ListRequ
 	if req.SportType != "" {
 		query = query.Where(squirrel.Eq{"sport_type": req.SportType})
 	}
+	sql, args, err := query.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to build SQL query: %v", err)
+	}
 
-	rows, err := query.RunWith(a.db).QueryContext(ctx)
+	// fmt.Printf("Generated SQL: %s, Args: %v\n", sql, args)
+
+	rows, err := a.db.QueryContext(ctx, sql, args...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch athletes: %v", err)
 	}
@@ -166,3 +175,4 @@ func (a *Athlete) ListAthletes(ctx context.Context, req *athleteservice.ListRequ
 		Athletes: athletes,
 	}, nil
 }
+

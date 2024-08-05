@@ -1,3 +1,4 @@
+basePath: /api/v1
 definitions:
   olympy_api-gateway_genproto_athlete_service.Athlete:
     properties:
@@ -12,17 +13,6 @@ definitions:
       sport_type:
         type: string
       updated_at:
-        type: string
-    type: object
-  olympy_api-gateway_genproto_athlete_service.ListRequest:
-    properties:
-      country_id:
-        type: integer
-      limit:
-        type: integer
-      page:
-        type: integer
-      sport_type:
         type: string
     type: object
   olympy_api-gateway_genproto_athlete_service.ListResponse:
@@ -107,13 +97,6 @@ definitions:
       updated_at:
         type: string
     type: object
-  olympy_api-gateway_genproto_country_service.ListRequest:
-    properties:
-      limit:
-        type: integer
-      page:
-        type: integer
-    type: object
   olympy_api-gateway_genproto_country_service.ListResponse:
     properties:
       count:
@@ -153,20 +136,13 @@ definitions:
       end_time:
         type: string
       id:
-        type: string
+        type: integer
       name:
         type: string
       sport_type:
         type: string
       start_time:
         type: string
-    type: object
-  olympy_api-gateway_genproto_event_service.GetAllEventsRequest:
-    properties:
-      page:
-        type: integer
-      page_size:
-        type: integer
     type: object
   olympy_api-gateway_genproto_event_service.GetAllEventsResponse:
     properties:
@@ -187,15 +163,6 @@ definitions:
       message:
         type: string
     type: object
-  olympy_api-gateway_genproto_event_service.SearchEventsRequest:
-    properties:
-      page:
-        type: integer
-      page_size:
-        type: integer
-      query:
-        type: string
-    type: object
   olympy_api-gateway_genproto_medal_service.CountryMedalCount:
     properties:
       bronze:
@@ -209,19 +176,6 @@ definitions:
       ranking:
         type: integer
       silver:
-        type: integer
-    type: object
-  olympy_api-gateway_genproto_medal_service.ListRequest:
-    properties:
-      athlete_id:
-        type: string
-      country:
-        type: integer
-      event_id:
-        type: integer
-      limit:
-        type: integer
-      page:
         type: integer
     type: object
   olympy_api-gateway_genproto_medal_service.ListResponse:
@@ -308,6 +262,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
       summary: Add an athlete
+      tags:
+      - Athlete
   /athletes/delete/{id}:
     delete:
       consumes:
@@ -335,8 +291,10 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
       summary: Delete an athlete
+      tags:
+      - Athlete
   /athletes/edit:
-    post:
+    put:
       consumes:
       - application/json
       description: This endpoint edits an existing athlete.
@@ -363,6 +321,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
       summary: Edit an athlete
+      tags:
+      - Athlete
   /athletes/get/{id}:
     get:
       consumes:
@@ -390,19 +350,33 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
       summary: Get an athlete
+      tags:
+      - Athlete
   /athletes/getall:
-    post:
+    get:
       consumes:
       - application/json
       description: This endpoint retrieves all athletes with pagination and optional
         filters.
       parameters:
-      - description: Pagination and filter parameters
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.ListRequest'
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Country ID filter
+        in: query
+        name: country_id
+        type: integer
+      - description: Sport type filter
+        in: query
+        name: sport_type
+        type: string
       produces:
       - application/json
       responses:
@@ -419,6 +393,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_athlete_service.Message'
       summary: List athletes
+      tags:
+      - Athlete
   /auth/login:
     post:
       consumes:
@@ -447,6 +423,8 @@ paths:
           schema:
             type: string
       summary: Login user
+      tags:
+      - Auth
   /auth/refresh:
     post:
       consumes:
@@ -475,6 +453,8 @@ paths:
           schema:
             type: string
       summary: Refresh access token
+      tags:
+      - Auth
   /auth/register:
     post:
       consumes:
@@ -503,6 +483,8 @@ paths:
           schema:
             type: string
       summary: Register user
+      tags:
+      - Auth
   /countries/add:
     post:
       consumes:
@@ -531,6 +513,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
       summary: Add a country
+      tags:
+      - Country
   /countries/delete/{id}:
     delete:
       consumes:
@@ -558,8 +542,10 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
       summary: Delete a country
+      tags:
+      - Country
   /countries/edit:
-    post:
+    put:
       consumes:
       - application/json
       description: This endpoint edits an existing country.
@@ -586,6 +572,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
       summary: Edit a country
+      tags:
+      - Country
   /countries/get/{id}:
     get:
       consumes:
@@ -613,18 +601,24 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
       summary: Get a country
+      tags:
+      - Country
   /countries/getall:
-    post:
+    get:
       consumes:
       - application/json
       description: This endpoint retrieves all countries with pagination.
       parameters:
-      - description: Pagination parameters
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/olympy_api-gateway_genproto_country_service.ListRequest'
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -641,6 +635,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_country_service.Message'
       summary: List countries
+      tags:
+      - Country
   /events/add:
     post:
       consumes:
@@ -669,6 +665,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
       summary: Add an event
+      tags:
+      - Event
   /events/delete/{id}:
     delete:
       consumes:
@@ -696,8 +694,10 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
       summary: Delete an event
+      tags:
+      - Event
   /events/edit:
-    post:
+    put:
       consumes:
       - application/json
       description: This endpoint edits an existing event.
@@ -724,6 +724,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
       summary: Edit an event
+      tags:
+      - Event
   /events/get/{id}:
     get:
       consumes:
@@ -751,18 +753,24 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
       summary: Get an event
+      tags:
+      - Event
   /events/getall:
-    post:
+    get:
       consumes:
       - application/json
       description: This endpoint retrieves all events with pagination.
       parameters:
-      - description: Pagination parameters
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.GetAllEventsRequest'
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:
@@ -779,18 +787,28 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
       summary: Get all events
+      tags:
+      - Event
   /events/search:
-    post:
+    get:
       consumes:
       - application/json
       description: This endpoint searches events by query with pagination.
       parameters:
-      - description: Search parameters
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/olympy_api-gateway_genproto_event_service.SearchEventsRequest'
+      - description: Search query
+        in: query
+        name: query
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:
@@ -807,6 +825,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_event_service.Message'
       summary: Search events
+      tags:
+      - Event
   /medals/add:
     post:
       consumes:
@@ -835,6 +855,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: Add a medal
+      tags:
+      - Medal
   /medals/delete/{id}:
     delete:
       consumes:
@@ -862,8 +884,10 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: Delete a medal
+      tags:
+      - Medal
   /medals/edit:
-    post:
+    put:
       consumes:
       - application/json
       description: This endpoint edits an existing medal.
@@ -890,6 +914,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: Edit a medal
+      tags:
+      - Medal
   /medals/get/{id}:
     get:
       consumes:
@@ -917,19 +943,37 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: Get a medal
+      tags:
+      - Medal
   /medals/getall:
-    post:
+    get:
       consumes:
       - application/json
       description: This endpoint retrieves all medals with pagination and optional
         filters.
       parameters:
-      - description: Pagination and filter parameters
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.ListRequest'
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Country ID
+        in: query
+        name: country
+        type: integer
+      - description: Event ID
+        in: query
+        name: event_id
+        type: integer
+      - description: Athlete ID
+        in: query
+        name: athlete_id
+        type: string
       produces:
       - application/json
       responses:
@@ -946,6 +990,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: List medals
+      tags:
+      - Medal
   /medals/ranking:
     get:
       consumes:
@@ -963,6 +1009,8 @@ paths:
           schema:
             $ref: '#/definitions/olympy_api-gateway_genproto_medal_service.Message'
       summary: Get medal rankings
+      tags:
+      - Medal
   /stream/send:
     post:
       consumes:
@@ -985,10 +1033,12 @@ paths:
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/olympy_api-gateway_genproto_stream_service.StreamEventResponse'
       summary: Send an event to the streaming service
+      tags:
+      - Live Streaming
 swagger: "2.0"

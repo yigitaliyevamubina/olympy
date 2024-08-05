@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 
 	genprotos "olympy/event-service/genproto/event_service"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
 )
 
 type Event struct {
@@ -42,7 +42,6 @@ func NewEventService(config *config.Config) (*Event, error) {
 
 func (e *Event) AddEvent(ctx context.Context, req *genprotos.AddEventRequest) (*genprotos.AddEventResponse, error) {
 	data := map[string]interface{}{
-		"id":         uuid.NewString(),
 		"name":       req.Event.Name,
 		"sport_type": req.Event.SportType,
 		"start_time": req.Event.StartTime,
@@ -51,18 +50,21 @@ func (e *Event) AddEvent(ctx context.Context, req *genprotos.AddEventRequest) (*
 
 	query, args, err := e.queryBuilder.Insert("events").
 		SetMap(data).
+		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("failed to build SQL query: %v", err)
 	}
 
-	if _, err := e.db.ExecContext(ctx, query, args...); err != nil {
-		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
+	var id int64
+
+	if err := e.db.QueryRowContext(ctx, query, args...).Scan(&id); err != nil {
+		return nil, fmt.Errorf("failed to scan row: %v", err)
 	}
 
 	return &genprotos.AddEventResponse{
 		Event: &genprotos.Event{
-			Id:        data["id"].(string),
+			Id:        id,
 			Name:      req.Event.Name,
 			SportType: req.Event.SportType,
 			StartTime: req.Event.StartTime,
@@ -91,8 +93,9 @@ func (e *Event) EditEvent(ctx context.Context, req *genprotos.EditEventRequest) 
 		return nil, fmt.Errorf("failed to execute SQL query: %v", err)
 	}
 
+	idStr := strconv.Itoa(int(req.Event.Id))
 	// Invalidate cache for this event
-	e.redisClient.Del(ctx, req.Event.Id)
+	e.redisClient.Del(ctx, idStr)
 
 	return &genprotos.EditEventResponse{
 		Event: &genprotos.Event{

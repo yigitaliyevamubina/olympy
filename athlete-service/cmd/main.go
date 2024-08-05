@@ -26,7 +26,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	api := api.New(service.NewAthleteService(*athletestorage))
 
 	log.Fatal(api.RUN(configs))
