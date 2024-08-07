@@ -14,8 +14,8 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      mongo:
-        condition: service_healthy
+      # mongo:
+        # condition: service_healthy
     networks:
       - my-network
 
@@ -73,9 +73,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8777:8777"
-    depends_on:
-      mongo:
-        condition: service_healthy
+    # depends_on:
+      # mongo:
+        # condition: service_healthy
     networks:
       - my-network
 
@@ -85,7 +85,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: aaaa
       POSTGRES_DB: olympydb
-      PGDATA: /data/postgres/dennic
+      PGDATA: /data/postgres/olympydb
     volumes:
       - db:/data/postgres
     ports:
@@ -129,11 +129,11 @@ services:
       - "27017:27017"
     networks:
       - my-network
-    healthcheck:
-      test: ["CMD-SHELL", "mongo --eval 'db.runCommand(\"ping\")'"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD-SHELL", "mongo --eval 'db.runCommand(\"ping\")'"]
+    #   interval: 10s
+    #   retries: 5
+    #   start_period: 30s
 
 volumes:
   db:
