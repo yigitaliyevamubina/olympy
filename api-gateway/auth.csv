@@ -3,7 +3,7 @@ p, unauthorized, /api/v1/athletes/add, POST
 p, unauthorized, /api/v1/athletes/delete, DELETE
 p, unauthorized, /api/v1/athletes/edit, PUT
 p, unauthorized, /api/v1/athletes/get, GET
-p, unauthorized, /api/v1/athletes/getall, GET
+p, string, /api/v1/athletes/getall, GET
 
 # Auth endpoints
 p, unauthorized, /api/v1/auth/login, POST
@@ -15,7 +15,7 @@ p, unauthorized, /api/v1/countries/add, POST
 p, unauthorized, /api/v1/countries/delete, DELETE
 p, unauthorized, /api/v1/countries/edit, PUT
 p, unauthorized, /api/v1/countries/get, GET
-p, unauthorized, /api/v1/countries/getall, GET
+p, admin, /api/v1/countries/getall, GET
 
 # Event endpoints
 p, unauthorized, /api/v1/events/add, POST

@@ -13,11 +13,9 @@ var (
 	clients  = make(map[string]*websocket.Conn)
 )
 
-// JWT secret key (replace with your actual secret key)
-var jwtSecret = []byte("thisisaverysecretsecretkeywrittenbynodirbek")
+var jwtSecret = []byte("nodirbek")
 
 func HandleConnections(w http.ResponseWriter, r *http.Request) {
-	// Extract and verify the JWT token from the request
 	tokenStr := r.URL.Query().Get("token")
 	if tokenStr == "" {
 		http.Error(w, "token is required", http.StatusUnauthorized)
@@ -33,14 +31,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Upgrade the HTTP connection to a WebSocket connection
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("failed to upgrade connection: %v", err)
 		return
 	}
 
-	// Store the authenticated client connection
 	clients[conn.RemoteAddr().String()] = conn
 
 	defer func() {
@@ -48,7 +44,6 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		delete(clients, conn.RemoteAddr().String())
 	}()
 
-	// Listen for messages from the client
 	for {
 		_, _, err := conn.ReadMessage()
 		if err != nil {

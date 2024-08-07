@@ -1,21 +1,26 @@
 package authhandlers
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 	genprotos "olympy/api-gateway/genproto/auth_service"
+	"github.com/streadway/amqp"
 
 	"github.com/gin-gonic/gin"
 )
 
 type AuthHandlers struct {
-	client genprotos.AuthServiceClient
-	logger *log.Logger
+	client          genprotos.AuthServiceClient
+	logger          *log.Logger
+	rabbitMQChannel *amqp.Channel
 }
 
-func NewAuthHandlers(client genprotos.AuthServiceClient, logger *log.Logger) *AuthHandlers {
+func NewAuthHandlers(client genprotos.AuthServiceClient, logger *log.Logger, ch *amqp.Channel) *AuthHandlers {
 	return &AuthHandlers{
-		client: client,
-		logger: logger,
+		client:          client,
+		logger:          logger,
+		rabbitMQChannel: ch,
 	}
 }
 
@@ -38,13 +43,28 @@ func (a *AuthHandlers) Register(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := a.client.RegisterUser(ctx, &req)
+	reqBytes, err := json.Marshal(req)
 	if err != nil {
 		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.IndentedJSON(200, resp)
+	err = a.rabbitMQChannel.Publish(
+		"",
+		"register_queue",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        reqBytes,
+		},
+	)
+	if err != nil {
+		ctx.IndentedJSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"message": "User registration data sent to the queue"})
 }
 
 // Login godoc

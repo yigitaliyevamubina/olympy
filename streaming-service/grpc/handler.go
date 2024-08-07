@@ -13,7 +13,6 @@ import (
 )
 
 func (s *server) StreamEvent(ctx context.Context, req *pb.StreamEventRequest) (*pb.StreamEventResponse, error) {
-	// Save to MongoDB
 	event := bson.D{
 		{"_id", uuid.NewString()},
 		{"event_id", req.GetEventId()},
@@ -24,7 +23,6 @@ func (s *server) StreamEvent(ctx context.Context, req *pb.StreamEventRequest) (*
 		return nil, fmt.Errorf("failed to save event to MongoDB: %v", err)
 	}
 
-	// Broadcast to clients
 	websocket.Broadcast(event)
 
 	return &pb.StreamEventResponse{Message: "Event streamed successfully"}, nil

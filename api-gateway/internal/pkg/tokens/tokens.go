@@ -5,30 +5,31 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/k0kubun/pp"
 	"go.uber.org/zap"
 )
 
 // JWTHandler ...
 type JWTHandler struct {
-	Id        string
-	Exp       string
-	Iat       string
-	Aud       []string
-	Role      string
-	SignKey   string
-	Log       *zap.Logger
-	Token     string
-	Timout    time.Duration
+	Id      string
+	Exp     string
+	Iat     string
+	Aud     []string
+	Role    string
+	SignKey string
+	Log     *zap.Logger
+	Token   string
+	Timout  time.Duration
 }
 
 type CustomClaims struct {
 	*jwt.Token
-	UserName  string   `json:"user_name"`
-	Id        string   `json:"id"`
-	Exp       float64  `json:"exp"`
-	Iat       float64  `json:"iat"`
-	Aud       []string `json:"aud"`
-	Role      string   `json:"role"`
+	UserName string   `json:"user_name"`
+	Id       string   `json:"id"`
+	Exp      float64  `json:"exp"`
+	Iat      float64  `json:"iat"`
+	Aud      []string `json:"aud"`
+	Role     string   `json:"role"`
 }
 
 // GenerateAuthJWT ...
@@ -112,14 +113,13 @@ func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
 	return claims, nil
 }
 
-// ExtractClaim extracts claims from given token
 func ExtractClaim(tokenStr string) (jwt.MapClaims, error) {
 	var (
 		token *jwt.Token
 		err   error
 	)
 	token, err = jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		// check token signing method etc
+		pp.Println("SIGNINGGG: ", config.SignKey)
 		return []byte(config.SignKey), nil
 	})
 	if err != nil {

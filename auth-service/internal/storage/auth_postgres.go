@@ -8,7 +8,6 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
 	genprotos "olympy/auth-service/genproto/auth_service"
@@ -45,7 +44,6 @@ func (a *AuthService) RegisterUser(ctx context.Context, req *genprotos.RegisterU
 	}
 
 	data := map[string]interface{}{
-		"id":       uuid.NewString(),
 		"username": req.Username,
 		"password": string(hashedPassword),
 		"role":     req.Role,
@@ -64,7 +62,6 @@ func (a *AuthService) RegisterUser(ctx context.Context, req *genprotos.RegisterU
 
 	return &genprotos.RegisterUserResponse{
 		User: &genprotos.User{
-			Id:       data["id"].(string),
 			Username: req.Username,
 			Role:     req.Role,
 		},

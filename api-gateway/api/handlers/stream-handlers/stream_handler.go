@@ -7,6 +7,7 @@ import (
 	streamingservice "olympy/api-gateway/genproto/stream_service"
 
 	"github.com/gin-gonic/gin"
+	"github.com/k0kubun/pp"
 )
 
 type StreamHandlers struct {
@@ -34,7 +35,7 @@ func NewStreamHandlers(client streamingservice.StreamingServiceClient, logger *l
 // @Router /stream/send [post]
 func (s *StreamHandlers) SendEvent(ctx *gin.Context) {
 	var req streamingservice.StreamEventRequest
-
+	pp.Println(req)
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

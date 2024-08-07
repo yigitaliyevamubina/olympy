@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
 	"olympy/auth-service/api"
 	"olympy/auth-service/internal/config"
 	"olympy/auth-service/internal/service"
 	"olympy/auth-service/internal/storage"
-	"log"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -26,8 +26,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := api.New(service.NewAuthServiceServer(storage))
+	serr := service.NewAuthServiceServer(storage)
+	api := api.New(serr)
+	go serr.StartRabbitMQConsumer()
 
 	log.Fatal(api.RUN(configs))
 }

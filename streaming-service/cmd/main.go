@@ -26,7 +26,7 @@ func main() {
 	}()
 
 	// Start gRPC server
-	log.Println("Starting gRPC server on port 50051...")
+	log.Println("Starting gRPC server on port 8777...")
 	if err := grpcServer.StartGRPCServer(mongoClient, ":8777"); err != nil {
 		log.Fatalf("failed to start gRPC server: %v", err)
 	}

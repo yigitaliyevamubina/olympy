@@ -12,6 +12,8 @@ import (
 	streamservice "olympy/api-gateway/genproto/stream_service"
 	"os"
 
+	"github.com/streadway/amqp"
+
 	"google.golang.org/grpc/credentials/insecure"
 
 	athletehandlers "olympy/api-gateway/api/handlers/athlete-handlers"
@@ -32,6 +34,30 @@ func main() {
 	logger := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	if err := cfg.Load(); err != nil {
 		logger.Fatal(err)
+	}
+
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	if err != nil {
+		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
+	}
+	defer conn.Close()
+
+	ch, err := conn.Channel()
+	if err != nil {
+		log.Fatalf("Failed to open a channel: %v", err)
+	}
+	defer ch.Close()
+
+	_, err = ch.QueueDeclare(
+		"register_queue",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		log.Fatalf("Failed to declare a queue: %v", err)
 	}
 
 	// Connect to auth service
@@ -78,7 +104,7 @@ func main() {
 	streamClient := streamservice.NewStreamingServiceClient(connStream)
 
 	// Creating handler instances
-	authHandlers := authhandlers.NewAuthHandlers(authClient, logger)
+	authHandlers := authhandlers.NewAuthHandlers(authClient, logger, ch)
 	eventHandlers := eventhandlers.NewEventHandlers(eventClient, logger)
 	countryHandlers := countryhandlers.NewCountryHandlers(countryClient, logger)
 	medalHandlers := medalhandlers.NewMedalHandlers(medalClient, logger)
