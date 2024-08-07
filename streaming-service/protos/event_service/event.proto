@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package event_service;
+
+service EventService {
+  rpc AddEvent(AddEventRequest) returns (AddEventResponse);
+  rpc EditEvent(EditEventRequest) returns (EditEventResponse);
+  rpc DeleteEvent(DeleteEventRequest) returns (Message);
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse);
+  rpc GetAllEvents(GetAllEventsRequest) returns (GetAllEventsResponse);
+  rpc SearchEvents(SearchEventsRequest) returns (GetAllEventsResponse);
+}
+
+message Event {
+  int64 id = 1;
+  string name = 2;
+  string sport_type = 3;
+  string start_time = 4;
+  string end_time = 5;
+}
+
+message AddEventRequest {
+  Event event = 1;
+}
+
+message AddEventResponse {
+  Event event = 1;
+}
+
+message EditEventRequest {
+  Event event = 1;
+}
+
+message EditEventResponse {
+  Event event = 1;
+}
+
+message DeleteEventRequest {
+  string id = 1;
+}
+
+message GetEventRequest {
+  string id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
+
+message GetAllEventsRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message GetAllEventsResponse {
+  repeated Event events = 1;
+  int32 total_count = 2;
+}
+
+message SearchEventsRequest {
+  string query = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message Message {
+  string message = 1;
+}

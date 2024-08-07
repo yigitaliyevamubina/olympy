@@ -1,13 +1,13 @@
 package main
 
 import (
-	"COMPETITIONS/olympy/streaming-service/storage"
-	"COMPETITIONS/olympy/streaming-service/websocket"
+	"olympy/streaming-service/storage"
+	"olympy/streaming-service/websocket"
 	"fmt"
 	"log"
 	"net/http"
 
-	grpcServer "COMPETITIONS/olympy/streaming-service/grpc"
+	grpcServer "olympy/streaming-service/grpc"
 )
 
 func main() {

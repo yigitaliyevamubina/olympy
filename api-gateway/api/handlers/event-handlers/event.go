@@ -26,6 +26,7 @@ func NewEventHandlers(client eventservice.EventServiceClient, logger *log.Logger
 // @Tags Event
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body eventservice.AddEventRequest true "Event details to add"
 // @Success 200 {object} eventservice.AddEventResponse
 // @Failure 400 {object} eventservice.Message
@@ -54,6 +55,7 @@ func (e *EventHandlers) AddEvent(ctx *gin.Context) {
 // @Tags Event
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body eventservice.EditEventRequest true "Event details to edit"
 // @Success 200 {object} eventservice.EditEventResponse
 // @Failure 400 {object} eventservice.Message
@@ -82,6 +84,7 @@ func (e *EventHandlers) EditEvent(ctx *gin.Context) {
 // @Tags Event
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id query string true "Event ID to delete"
 // @Success 200 {object} eventservice.Message
 // @Failure 400 {object} eventservice.Message

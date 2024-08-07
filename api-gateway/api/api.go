@@ -47,6 +47,7 @@ func New(
 		countryhandler: countryhandler,
 		medalhandler:   medalhandler,
 		athletehandler: athletehandler,
+		streamhandlers: streamhandler,
 	}
 }
 
@@ -97,6 +98,7 @@ func (a *API) RUN() error {
 		api.GET("/athletes/get", a.athletehandler.GetAthlete)          // Get athlete by ID
 		api.GET("/athletes/getall", a.athletehandler.ListAthletes)         // List athletes
 		api.POST("/stream/send", a.streamhandlers.SendEvent)               // Send
+
 	}
 
 	return router.Run(a.cfg.ServerAddress)

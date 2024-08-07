@@ -26,6 +26,7 @@ func NewMedalHandlers(client medalservice.MedalServiceClient, logger *log.Logger
 // @Tags Medal
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body medalservice.Medal true "Medal details to add"
 // @Success 200 {object} medalservice.Medal
 // @Failure 400 {object} medalservice.Message
@@ -54,6 +55,7 @@ func (m *MedalHandlers) AddMedal(ctx *gin.Context) {
 // @Tags Medal
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body medalservice.Medal true "Medal details to edit"
 // @Success 200 {object} medalservice.Medal
 // @Failure 400 {object} medalservice.Message
@@ -82,6 +84,7 @@ func (m *MedalHandlers) EditMedal(ctx *gin.Context) {
 // @Tags Medal
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id query string true "Medal ID to delete"
 // @Success 200 {object} medalservice.Message
 // @Failure 400 {object} medalservice.Message

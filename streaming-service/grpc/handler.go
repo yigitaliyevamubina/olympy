@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	pb "COMPETITIONS/olympy/streaming-service"
-	"COMPETITIONS/olympy/streaming-service/websocket"
+	pb "olympy/streaming-service/genproto/stream_service"
+	"olympy/streaming-service/websocket"
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"

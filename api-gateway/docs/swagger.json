@@ -10,6 +10,11 @@
     "paths": {
         "/athletes/add": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint adds a new athlete.",
                 "consumes": [
                     "application/json"
@@ -56,6 +61,11 @@
         },
         "/athletes/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint deletes an athlete by its ID.",
                 "consumes": [
                     "application/json"
@@ -100,6 +110,11 @@
         },
         "/athletes/edit": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint edits an existing athlete.",
                 "consumes": [
                     "application/json"
@@ -146,11 +161,6 @@
         },
         "/athletes/get": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves an athlete by its ID.",
                 "consumes": [
                     "application/json"
@@ -195,11 +205,6 @@
         },
         "/athletes/getall": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves all athletes with pagination and optional filters.",
                 "consumes": [
                     "application/json"
@@ -537,11 +542,6 @@
         },
         "/countries/get": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves a country by its ID.",
                 "consumes": [
                     "application/json"
@@ -586,11 +586,6 @@
         },
         "/countries/getall": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves all countries with pagination.",
                 "consumes": [
                     "application/json"
@@ -642,6 +637,11 @@
         },
         "/events/add": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint adds a new event.",
                 "consumes": [
                     "application/json"
@@ -688,6 +688,11 @@
         },
         "/events/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint deletes an event by its ID.",
                 "consumes": [
                     "application/json"
@@ -732,6 +737,11 @@
         },
         "/events/edit": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint edits an existing event.",
                 "consumes": [
                     "application/json"
@@ -930,6 +940,11 @@
         },
         "/medals/add": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint adds a new medal.",
                 "consumes": [
                     "application/json"
@@ -976,6 +991,11 @@
         },
         "/medals/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint deletes a medal by its ID.",
                 "consumes": [
                     "application/json"
@@ -1020,6 +1040,11 @@
         },
         "/medals/edit": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint edits an existing medal.",
                 "consumes": [
                     "application/json"
@@ -1208,6 +1233,11 @@
         },
         "/stream/send": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint sends an event to the streaming service.",
                 "consumes": [
                     "application/json"

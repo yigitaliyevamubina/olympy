@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/athletes/add": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint adds a new athlete.",
                 "consumes": [
                     "application/json"
@@ -63,6 +68,11 @@ const docTemplate = `{
         },
         "/athletes/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint deletes an athlete by its ID.",
                 "consumes": [
                     "application/json"
@@ -107,6 +117,11 @@ const docTemplate = `{
         },
         "/athletes/edit": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint edits an existing athlete.",
                 "consumes": [
                     "application/json"
@@ -153,11 +168,6 @@ const docTemplate = `{
         },
         "/athletes/get": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves an athlete by its ID.",
                 "consumes": [
                     "application/json"
@@ -202,11 +212,6 @@ const docTemplate = `{
         },
         "/athletes/getall": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves all athletes with pagination and optional filters.",
                 "consumes": [
                     "application/json"
@@ -544,11 +549,6 @@ const docTemplate = `{
         },
         "/countries/get": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves a country by its ID.",
                 "consumes": [
                     "application/json"
@@ -593,11 +593,6 @@ const docTemplate = `{
         },
         "/countries/getall": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "This endpoint retrieves all countries with pagination.",
                 "consumes": [
                     "application/json"
@@ -649,6 +644,11 @@ const docTemplate = `{
         },
         "/events/add": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint adds a new event.",
                 "consumes": [
                     "application/json"
@@ -695,6 +695,11 @@ const docTemplate = `{
         },
         "/events/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint deletes an event by its ID.",
                 "consumes": [
                     "application/json"
@@ -739,6 +744,11 @@ const docTemplate = `{
         },
         "/events/edit": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint edits an existing event.",
                 "consumes": [
                     "application/json"
@@ -937,6 +947,11 @@ const docTemplate = `{
         },
         "/medals/add": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint adds a new medal.",
                 "consumes": [
                     "application/json"
@@ -983,6 +998,11 @@ const docTemplate = `{
         },
         "/medals/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint deletes a medal by its ID.",
                 "consumes": [
                     "application/json"
@@ -1027,6 +1047,11 @@ const docTemplate = `{
         },
         "/medals/edit": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint edits an existing medal.",
                 "consumes": [
                     "application/json"
@@ -1215,6 +1240,11 @@ const docTemplate = `{
         },
         "/stream/send": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "This endpoint sends an event to the streaming service.",
                 "consumes": [
                     "application/json"

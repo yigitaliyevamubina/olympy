@@ -13,8 +13,7 @@ import (
 	"os"
 
 	"github.com/streadway/amqp"
-
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc"
 
 	athletehandlers "olympy/api-gateway/api/handlers/athlete-handlers"
 	authhandlers "olympy/api-gateway/api/handlers/auth-handlers"
@@ -22,8 +21,6 @@ import (
 	eventhandlers "olympy/api-gateway/api/handlers/event-handlers"
 	medalhandlers "olympy/api-gateway/api/handlers/medal-handlers"
 	streamhandlers "olympy/api-gateway/api/handlers/stream-handlers"
-
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -89,7 +86,7 @@ func main() {
 	defer connAthlete.Close()
 
 	// Connect to stream service
-	connStream, err := grpc.Dial(cfg.StreamHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connStream, err := grpc.Dial(cfg.StreamHost, grpc.WithInsecure())
 	if err != nil {
 		logger.Fatalf("Failed to connect to stream service: %v", err)
 	}
@@ -110,7 +107,6 @@ func main() {
 	medalHandlers := medalhandlers.NewMedalHandlers(medalClient, logger)
 	athleteHandlers := athletehandlers.NewAthleteHandlers(athleteClient, logger)
 	streamHandlers := streamhandlers.NewStreamHandlers(streamClient, logger)
-
 	// Creating API instance
 	api := api.New(cfg, logger, authHandlers, eventHandlers, countryHandlers, medalHandlers, athleteHandlers, streamHandlers)
 	logger.Fatal(api.RUN())

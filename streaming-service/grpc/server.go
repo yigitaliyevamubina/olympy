@@ -4,8 +4,8 @@ import (
 	"log"
 	"net"
 
-	pb "COMPETITIONS/olympy/streaming-service"
-	"COMPETITIONS/olympy/streaming-service/storage"
+	pb "olympy/streaming-service/genproto/stream_service"
+	"olympy/streaming-service/storage"
 
 	"google.golang.org/grpc"
 )

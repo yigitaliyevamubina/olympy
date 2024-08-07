@@ -26,6 +26,7 @@ func NewAthleteHandlers(client athleteservice.AthleteServiceClient, logger *log.
 // @Tags Athlete
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body athleteservice.Athlete true "Athlete details to add"
 // @Success 200 {object} athleteservice.Athlete
 // @Failure 400 {object} athleteservice.Message
@@ -54,6 +55,7 @@ func (a *AthleteHandlers) AddAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body athleteservice.Athlete true "Athlete details to edit"
 // @Success 200 {object} athleteservice.Athlete
 // @Failure 400 {object} athleteservice.Message
@@ -82,6 +84,7 @@ func (a *AthleteHandlers) EditAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id query string true "Athlete ID to delete"
 // @Success 200 {object} athleteservice.Message
 // @Failure 400 {object} athleteservice.Message
@@ -113,7 +116,6 @@ func (a *AthleteHandlers) DeleteAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
 // @Param id query string true "Athlete ID to get"
 // @Success 200 {object} athleteservice.Athlete
 // @Failure 400 {object} athleteservice.Message
@@ -145,7 +147,6 @@ func (a *AthleteHandlers) GetAthlete(ctx *gin.Context) {
 // @Tags Athlete
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
 // @Param page query int32 false "Page number" default(1)
 // @Param limit query int32 false "Number of items per page" default(10)
 // @Param country_id query int64 false "Country ID filter"

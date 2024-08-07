@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package streaming_service;
+
+service StreamingService {
+  rpc StreamEvent(StreamEventRequest) returns (StreamEventResponse);
+}
+
+message StreamEventRequest {
+  string event_id = 1;
+  string text = 2;
+}
+
+message StreamEventResponse {
+  string message = 1;
+}

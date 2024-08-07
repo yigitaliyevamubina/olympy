@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -18,13 +17,14 @@ type (
 		StreamHost    string
 	}
 )
+
 const (
 	OtpSecret = "some_secret"
 	SignKey   = "nodirbek"
 )
+
 func (c *Config) Load() error {
 	if err := godotenv.Load(); err != nil {
-		fmt.Println("AAAAAAAAAAAAAAAAAAAAAA", err)
 		return err
 	}
 	c.AuthHost = os.Getenv("AUTH_HOST")
@@ -32,7 +32,7 @@ func (c *Config) Load() error {
 	c.MedalHost = os.Getenv("MEDAL_HOST")
 	c.AthleteHost = os.Getenv("ATHLETE_HOST")
 	c.AiService = os.Getenv("AI_SERVICE")
-	c.StreamHost = ":8777"
+	c.StreamHost = os.Getenv("STREAM_SERVICE")
 	c.ServerAddress = os.Getenv("SERVER_ADDRESS")
 	return nil
 }

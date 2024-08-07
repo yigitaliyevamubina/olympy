@@ -113,7 +113,6 @@ func (c *CountryHandlers) DeleteCountry(ctx *gin.Context) {
 // @Tags Country
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
 // @Param id query string true "Country ID to retrieve"
 // @Success 200 {object} countryservice.Country
 // @Failure 400 {object} countryservice.Message
@@ -145,7 +144,6 @@ func (c *CountryHandlers) GetCountry(ctx *gin.Context) {
 // @Tags Country
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
 // @Param page query int32 false "Page number" default(1)
 // @Param limit query int32 false "Number of items per page" default(10)
 // @Success 200 {object} countryservice.ListResponse
