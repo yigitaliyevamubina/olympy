@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Initialize MongoDB connection
-	mongoClient, err := storage.NewMongoClient("mongodb://localhost:27017")
+	mongoClient, err := storage.NewMongoClient("mongodb://mongo:27017")
 	fmt.Println("mongoooooooo")
 	if err != nil {
 		log.Fatalf("failed to connect to MongoDB: %v", err)

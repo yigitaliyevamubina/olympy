@@ -5,7 +5,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN go build -o main cmd/app/main.go
+RUN go build -o main cmd/main.go
 
 FROM alpine:3.18
 

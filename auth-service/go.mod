@@ -1,6 +1,6 @@
 module olympy/auth-service
 
-go 1.22.5
+go 1.22.3
 
 require (
 	github.com/Masterminds/squirrel v1.5.4

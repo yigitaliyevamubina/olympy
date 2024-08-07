@@ -47,13 +47,13 @@ func (c *Config) Load() error {
 	}
 
 	c.Server.Port = ":" + getEnv("SERVER_PORT", "4444")
-	c.Database.Host = getEnv("DB_HOST", "localhost")
-	c.Database.Port = getEnv("DB_PORT", "5544")
+	c.Database.Host = getEnv("DB_HOST", "postgres")
+	c.Database.Port = getEnv("DB_PORT", "5432")
 	c.Database.User = getEnv("DB_USER", "postgres")
-	c.Database.Password = getEnv("DB_PASSWORD", "1234")
+	c.Database.Password = getEnv("DB_PASSWORD", "aaaa")
 	c.Database.DBName = getEnv("DB_NAME", "olympydb")
 
-	c.Redis.Addr = getEnv("REDIS_ADDR", "localhost:6379")
+	c.Redis.Addr = getEnv("REDIS_ADDR", "redis:6379")
 	c.Redis.Password = getEnv("REDIS_PASSWORD", "")
 	c.Redis.DB = 0
 

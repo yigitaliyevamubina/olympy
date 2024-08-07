@@ -33,6 +33,7 @@ func (c *Config) Load() error {
 	c.AthleteHost = os.Getenv("ATHLETE_HOST")
 	c.AiService = os.Getenv("AI_SERVICE")
 	c.StreamHost = os.Getenv("STREAM_SERVICE")
+	c.StreamHost = os.Getenv("STREAM_HOST")
 	c.ServerAddress = os.Getenv("SERVER_ADDRESS")
 	return nil
 }

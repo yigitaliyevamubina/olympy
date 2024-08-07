@@ -33,7 +33,7 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
 	}
@@ -99,7 +99,6 @@ func main() {
 	medalClient := medalservice.NewMedalServiceClient(connMedal)
 	athleteClient := athleteservice.NewAthleteServiceClient(connAthlete)
 	streamClient := streamservice.NewStreamingServiceClient(connStream)
-
 	// Creating handler instances
 	authHandlers := authhandlers.NewAuthHandlers(authClient, logger, ch)
 	eventHandlers := eventhandlers.NewEventHandlers(eventClient, logger)

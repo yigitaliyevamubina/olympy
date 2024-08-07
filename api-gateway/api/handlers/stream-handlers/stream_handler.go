@@ -8,6 +8,7 @@ import (
 
     "github.com/gin-gonic/gin"
     "github.com/k0kubun/pp"
+	"github.com/gin-gonic/gin"
 )
 
 type StreamHandlers struct {
@@ -20,6 +21,13 @@ func NewStreamHandlers(client streamingservice.StreamingServiceClient, logger *l
         client: client,
         logger: logger,
     }
+	if client == nil {
+		logger.Fatal("Client is nil during initialization") // Use Fatal to terminate the application if the client is nil
+	}
+	return &StreamHandlers{
+		client: client,
+		logger: logger,
+	}
 }
 
 // SendEvent godoc
@@ -40,6 +48,11 @@ func (s *StreamHandlers) SendEvent(ctx *gin.Context) {
         ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+	var req streamingservice.StreamEventRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
     // Debugging logs
     s.logger.Println("StreamHandlers struct:", s)
