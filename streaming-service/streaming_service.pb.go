@@ -4,7 +4,7 @@
 // 	protoc        v3.12.4
 // source: proto/streaming_service.proto
 
-package __
+package streamservice
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

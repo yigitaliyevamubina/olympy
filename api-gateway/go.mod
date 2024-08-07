@@ -1,6 +1,6 @@
 module olympy/api-gateway
 
-go 1.22.5
+go 1.22.3
 
 require (
 	github.com/casbin/casbin/v2 v2.98.0

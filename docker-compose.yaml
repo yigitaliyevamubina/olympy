@@ -1,0 +1,143 @@
+version: '3.9'
+
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222:2222"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  event-service:
+    build:
+      context: ./event-service
+      dockerfile: Dockerfile
+    ports:
+      - "4444:4444"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  medal-service:
+    build:
+      context: ./medal-service
+      dockerfile: Dockerfile
+    ports:
+      - "5555:5555"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  athlete-service:
+    build:
+      context: ./athlete-service
+      dockerfile: Dockerfile
+    ports:
+      - "6666:6666"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  streaming-service:
+    build:
+      context: ./streaming-service
+      dockerfile: Dockerfile
+    ports:
+      - "8777:8777"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: aaaa
+      POSTGRES_DB: olympydb
+      PGDATA: /data/postgres/dennic
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q check_port -p 5672"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD-SHELL", "mongo --eval 'db.runCommand(\"ping\")'"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db:
+
+networks:
+  my-network:
+    driver: bridge

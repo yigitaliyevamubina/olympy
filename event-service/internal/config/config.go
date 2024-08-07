@@ -53,7 +53,7 @@ func (c *Config) Load() error {
 	c.Database.Password = getEnv("DB_PASSWORD", "1234")
 	c.Database.DBName = getEnv("DB_NAME", "olympydb")
 
-	c.Redis.Addr = getEnv("REDIS_ADDR", "localhost:6379")
+	c.Redis.Addr = getEnv("REDIS_ADDR", "redis:6379")
 	c.Redis.Password = getEnv("REDIS_PASSWORD", "")
 	c.Redis.DB = 0
 

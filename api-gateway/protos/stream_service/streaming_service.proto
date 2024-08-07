@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package streaming_service;
 
+option go_package = ".";
+
 service StreamingService {
   rpc StreamEvent(StreamEventRequest) returns (StreamEventResponse);
 }
